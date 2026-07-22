@@ -547,22 +547,39 @@
     calcular();
   });
 
+  // Cole aqui o Bin ID gerado no jsonbin.io (o mesmo configurado no admin-precos.html)
+  // para que a calculadora sempre puxe os preços mais atuais, em qualquer aparelho.
+  // Deixe em branco para usar o arquivo precos.json local como antes.
+  const BIN_ID_PRECOS = "6a60b292da38895dfe7f2e27";
+
+  function aplicarPrecos(dados){
+    if (Array.isArray(dados.modelosUsados) && dados.modelosUsados.length){
+      modelosUsados = dados.modelosUsados;
+    }
+    if (Array.isArray(dados.modelosNovos) && dados.modelosNovos.length){
+      modelosNovos = dados.modelosNovos;
+    }
+    montarListaModelos();
+  }
+
   // busca a tabela de preços atualizada (editada só pelo admin no painel)
-  fetch('precos.json')
-    .then(r => r.json())
-    .then(dados => {
-      if (Array.isArray(dados.modelosUsados) && dados.modelosUsados.length){
-        modelosUsados = dados.modelosUsados;
-      }
-      if (Array.isArray(dados.modelosNovos) && dados.modelosNovos.length){
-        modelosNovos = dados.modelosNovos;
-      }
-      montarListaModelos();
-    })
-    .catch(() => {
-      // se não conseguir carregar o precos.json, segue com os valores de fallback
-      montarListaModelos();
-    });
+  if (BIN_ID_PRECOS){
+    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID_PRECOS}/latest`)
+      .then(r => r.json())
+      .then(resp => aplicarPrecos(resp.record))
+      .catch(() => {
+        // se a nuvem falhar, tenta o arquivo local antes de cair no fallback fixo
+        fetch('precos.json').then(r => r.json()).then(aplicarPrecos).catch(montarListaModelos);
+      });
+  } else {
+    fetch('precos.json')
+      .then(r => r.json())
+      .then(aplicarPrecos)
+      .catch(() => {
+        // se não conseguir carregar o precos.json, segue com os valores de fallback
+        montarListaModelos();
+      });
+  }
 
   function calcular(){
     const usado = modelosUsados[selModeloUsado.value];

@@ -158,7 +158,33 @@
       <button class="btn-add-linha" id="btnAddNovo" type="button">+ Adicionar modelo</button>
     </section>
 
-    <button class="btn-baixar" id="btnBaixar" type="button">⬇ Baixar precos.json atualizado</button>
+    <section class="panel">
+      <h2><span class="num">3</span> Conexão com o armazenamento de preços</h2>
+      <p class="panel-hint">Preencha uma vez — fica salvo neste navegador. Com isso, ao salvar, os preços já atualizam na hora pra todo mundo, sem precisar subir arquivo em lugar nenhum.</p>
+      <div class="field">
+        <label for="inpBinId">Bin ID (do jsonbin.io)</label>
+        <input type="text" id="inpBinId" placeholder="Ex: 6598abc123def456...">
+      </div>
+      <div class="field">
+        <label for="inpMasterKey">Chave mestra (X-Master-Key)</label>
+        <input type="password" id="inpMasterKey" placeholder="$2b$10$xxxxxxxxxxxxxxxxxxxxxxxx">
+      </div>
+      <p class="panel-hint" style="margin-top:-6px;">
+        <b>Como configurar (só uma vez):</b><br>
+        1. Crie uma conta grátis em <b>jsonbin.io</b>.<br>
+        2. Vá em "API Keys" e copie sua <b>X-MASTER-KEY</b>.<br>
+        3. Crie um novo Bin (Create Bin), marque como <b>Public</b>, e cole o conteúdo do
+        seu <code>precos.json</code> atual dentro dele.<br>
+        4. Copie o <b>Bin ID</b> que aparece na URL/painel do bin.<br>
+        5. Cole os dois campos acima e clique em "Salvar configuração".
+      </p>
+      <button class="btn-add-linha" id="btnSalvarConfig" type="button">Salvar configuração</button>
+    </section>
+
+    <button class="btn-baixar" id="btnSalvarNuvem" type="button" style="background: var(--teal);">☁ Salvar preços agora (atualiza pra todo mundo)</button>
+    <div id="statusNuvem" style="text-align:center; font-size:12.5px; margin-top:10px; color: var(--ink-soft);"></div>
+
+    <button class="btn-baixar" id="btnBaixar" type="button" style="background: transparent; border: 1.5px solid var(--line); color: var(--ink-soft);">⬇ Ou baixar precos.json manualmente</button>
   </div>
 
   <footer>Pai do Cell — administração interna</footer>
@@ -187,7 +213,94 @@
 
   let precos = { modelosUsados: [], modelosNovos: [] };
 
+  // ---------- configuração do armazenamento em nuvem (salva só neste navegador) ----------
+  const CHAVE_CONFIG = 'paidocell_admin_nuvem';
+
+  function carregarConfig(){
+    try{
+      const dados = localStorage.getItem(CHAVE_CONFIG);
+      if (dados){
+        const cfg = JSON.parse(dados);
+        document.getElementById('inpBinId').value = cfg.binId || '';
+        document.getElementById('inpMasterKey').value = cfg.masterKey || '';
+      }
+    }catch(e){}
+  }
+  function salvarConfig(){
+    const cfg = {
+      binId: document.getElementById('inpBinId').value.trim(),
+      masterKey: document.getElementById('inpMasterKey').value.trim(),
+    };
+    localStorage.setItem(CHAVE_CONFIG, JSON.stringify(cfg));
+    return cfg;
+  }
+  document.getElementById('btnSalvarConfig').addEventListener('click', () => {
+    salvarConfig();
+    alert('Configuração salva neste navegador.');
+  });
+
+  async function salvarNaNuvem(){
+    const cfg = salvarConfig();
+    const status = document.getElementById('statusNuvem');
+
+    if (!cfg.binId || !cfg.masterKey){
+      status.style.color = '#E5484D';
+      status.textContent = 'Preencha o Bin ID e a chave mestra antes de salvar.';
+      return;
+    }
+
+    status.style.color = 'var(--ink-soft)';
+    status.textContent = 'Salvando...';
+
+    try{
+      const resp = await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': cfg.masterKey
+        },
+        body: JSON.stringify(precos)
+      });
+
+      if (!resp.ok){
+        throw new Error(resp.status === 401
+          ? 'Chave mestra incorreta.'
+          : resp.status === 404
+            ? 'Bin ID não encontrado. Confira o valor.'
+            : `Erro ao salvar (${resp.status}).`);
+      }
+
+      status.style.color = '#4FE38B';
+      status.textContent = '✓ Salvo! Já está valendo pra todo mundo, na hora.';
+    } catch (e){
+      status.style.color = '#E5484D';
+      status.textContent = '✕ ' + e.message;
+    }
+  }
+  document.getElementById('btnSalvarNuvem').addEventListener('click', salvarNaNuvem);
+
   function carregarPrecos(){
+    carregarConfig();
+    const cfg = { binId: document.getElementById('inpBinId').value.trim() };
+
+    if (cfg.binId){
+      fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`)
+        .then(r => r.json())
+        .then(resp => {
+          precos = resp.record;
+          renderLista('listaUsados', precos.modelosUsados, 'precoBase');
+          renderLista('listaNovos', precos.modelosNovos, 'preco');
+        })
+        .catch(() => {
+          alert('Não consegui carregar os preços do jsonbin.io. Confira o Bin ID, ou carregue o precos.json local abaixo.');
+          carregarPrecosLocal();
+        });
+    } else {
+      carregarPrecosLocal();
+    }
+  }
+
+  function carregarPrecosLocal(){
     fetch('precos.json')
       .then(r => r.json())
       .then(dados => {
