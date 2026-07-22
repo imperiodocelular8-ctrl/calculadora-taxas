@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0B0F0D">
+<title>Pai do Cell · Histórico de Garantias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B0F0D; --panel: #141917; --ink: #EAF3ED; --ink-soft: #8FA69A;
+    --line: #24312B; --teal: #19A94B; --teal-deep: #0F6D30; --amber: #2ECC63;
+    --amber-soft: #163823; --red: #E5484D;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 28px -14px rgba(0,0,0,0.7);
+  }
+  *{ box-sizing: border-box; }
+  html, body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    background-image: radial-gradient(circle at 1px 1px, rgba(234,243,237,0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+    color: var(--ink); font-family: 'Inter', sans-serif; min-height: 100vh; padding: 40px 16px 90px;
+  }
+  .wrap{ max-width: 880px; margin: 0 auto; }
+  .voltar-link{ display:inline-block; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); text-decoration: none; margin-bottom: 10px; }
+  .voltar-link:hover{ color: var(--teal); }
+  .logo{ display:flex; align-items:center; gap: 10px; margin-bottom: 18px; }
+  .logo-mark{
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(155deg, #1EBD57, #0F6D30);
+    display:flex; align-items:center; justify-content:center; flex-shrink: 0;
+    box-shadow: 0 4px 14px -4px rgba(25,169,75,0.55);
+  }
+  .logo-mark svg{ width: 18px; height: 18px; }
+  .logo-text{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 17px; color: var(--ink); line-height: 1.1; }
+  .logo-text span{ display:block; font-family:'IBM Plex Mono', monospace; font-weight: 600; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); margin-top: 2px; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #6FE39B; background: #10281A; display:inline-block; padding: 4px 10px; border-radius: 100px;
+    margin-bottom: 10px; font-weight: 600;
+  }
+  h1{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(24px, 4vw, 30px); margin: 0; }
+  .subtitle{ color: var(--ink-soft); font-size: 14px; margin-top: 6px; max-width: 56ch; }
+  header{ margin-bottom: 22px; }
+
+  .gate{
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    padding: 28px; box-shadow: var(--shadow); text-align:center;
+  }
+  .gate p{ color: var(--ink-soft); font-size: 13.5px; margin: 6px 0 18px; }
+  .gate input{
+    width: 100%; max-width: 260px; padding: 12px 14px; font-size: 15px; text-align:center;
+    border: 1.5px solid var(--line); border-radius: 10px; background: #0E1310; color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .gate input:focus{ outline:none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(25,169,75,0.18); }
+  .gate button{
+    padding: 12px 22px; border-radius: 10px; border: none; background: var(--teal);
+    color: #06170D; font-weight: 700; font-size: 14px; cursor: pointer;
+  }
+  .gate button:hover{ filter: brightness(1.08); }
+  .gate .erro{ color: var(--red); font-size: 12.5px; margin-top: 10px; display:none; }
+
+  #painelPrincipal{ display:none; }
+
+  .topo-acoes{ display:flex; justify-content:space-between; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .busca{
+    flex: 1 1 220px; padding: 10px 14px; border-radius: 9px; border: 1.5px solid var(--line);
+    background: #0E1310; color: var(--ink); font-size: 13.5px;
+  }
+  .busca:focus{ outline:none; border-color: var(--teal); }
+  .btn-atualizar{
+    padding: 9px 16px; border-radius: 9px; border: 1px solid var(--line); background: #0E1310;
+    color: var(--ink-soft); font-weight: 600; font-size: 12.5px; cursor: pointer;
+  }
+  .btn-atualizar:hover{ border-color: var(--teal); color: var(--teal); }
+
+  .garantia-item{
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 18px; margin-bottom: 10px; cursor: pointer;
+  }
+  .g-topo{ display:flex; justify-content:space-between; align-items:center; gap: 10px; }
+  .g-cliente{ font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 14.5px; }
+  .g-produto{ font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+  .g-loja{
+    font-family:'IBM Plex Mono', monospace; font-size: 10.5px; text-transform: uppercase;
+    letter-spacing: .05em; color: var(--teal); background: var(--amber-soft);
+    padding: 3px 8px; border-radius: 100px; white-space: nowrap;
+  }
+  .g-detalhe{ display:none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); }
+  .g-detalhe.aberto{ display:block; }
+  .g-detalhe .linha{ display:flex; justify-content:space-between; font-size: 12.5px; color: var(--ink-soft); padding: 4px 0; }
+  .g-detalhe .linha b{ color: var(--ink); font-weight: 600; }
+  .vazio{ font-size: 12.5px; color: var(--ink-soft); text-align:center; padding: 20px 0; }
+
+  footer{ text-align:center; font-size: 12px; color: var(--ink-soft); margin-top: 26px; font-family: 'IBM Plex Mono', monospace; }
+
+  @media (max-width: 640px){
+    body{ padding: 20px 12px 90px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <a href="index.html" class="voltar-link">← Voltar ao painel</a>
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="2" width="12" height="20" rx="2.5" stroke="#06170D" stroke-width="1.8"/>
+          <line x1="9" y1="18.2" x2="15" y2="18.2" stroke="#06170D" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">Pai do Cell<span>Assistência &amp; Acessórios</span></div>
+    </div>
+    <span class="eyebrow">Uso interno · Garantias</span>
+    <h1>Histórico de Garantias</h1>
+    <p class="subtitle">Consulte as garantias já emitidas pelas lojas.</p>
+  </header>
+
+  <div class="gate" id="gate">
+    <p id="gateTexto">Entre com seu usuário para ver o histórico.</p>
+    <div id="formLogin">
+      <input type="text" id="loginUsuario" placeholder="Usuário">
+      <input type="password" id="loginSenha" placeholder="Senha">
+      <br>
+      <button id="btnLogin" type="button">Entrar</button>
+      <p style="font-size:12.5px; color:var(--ink-soft); margin-top:14px;">Ainda não tem conta? <a href="garantias.html" style="color:var(--teal); font-weight:600; text-decoration:none;">Crie na aba de gerar garantia</a></p>
+      <div class="erro" id="msgErro" style="display:block; min-height:14px;"></div>
+    </div>
+  </div>
+
+  <div id="painelPrincipal">
+    <div class="topo-acoes">
+      <input type="text" class="busca" id="inpBusca" placeholder="Buscar por cliente ou produto...">
+      <button class="btn-atualizar" id="btnAtualizar" type="button">🔄 Atualizar</button>
+    </div>
+    <div id="listaGarantias"></div>
+  </div>
+
+  <footer>Pai do Cell — uso interno</footer>
+</div>
+
+<script>
+  const BIN_ID_GARANTIAS = "6a60c41ef5f4af5e29b0f2ce";
+  const CHAVE_SESSAO = 'paidocell_funcionario_logado';
+
+  const NOMES_LOJA = { "santa-teresa": "Santa Teresa", "santa-maria": "Santa Maria", "aracruz": "Aracruz" };
+  let todasGarantias = [];
+
+  async function hashSenha(senha){
+    const enc = new TextEncoder();
+    const dados = enc.encode('paidocell_' + senha);
+    const buffer = await crypto.subtle.digest('SHA-256', dados);
+    return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  function mostrarConteudo(){
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('painelPrincipal').style.display = 'block';
+    carregarDados();
+  }
+
+  document.getElementById('btnLogin').addEventListener('click', tentarEntrar);
+  document.getElementById('loginSenha').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tentarEntrar();
+  });
+  async function tentarEntrar(){
+    const usuario = document.getElementById('loginUsuario').value.trim().toLowerCase();
+    const senha = document.getElementById('loginSenha').value;
+    const erro = document.getElementById('msgErro');
+    erro.textContent = '';
+
+    if (!BIN_ID_GARANTIAS){
+      erro.textContent = 'Login ainda não configurado nesta página.';
+      return;
+    }
+    if (!usuario || !senha){
+      erro.textContent = 'Preencha usuário e senha.';
+      return;
+    }
+    try{
+      const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID_GARANTIAS}/latest`);
+      const json = await resp.json();
+      const funcionarios = (json.record && json.record.funcionarios) || [];
+      const senhaHash = await hashSenha(senha);
+      const encontrado = funcionarios.find(f => f.usuario === usuario && f.senhaHash === senhaHash);
+      if (!encontrado){
+        erro.textContent = 'Usuário ou senha incorretos.';
+        return;
+      }
+      localStorage.setItem(CHAVE_SESSAO, JSON.stringify({ nome: encontrado.nome, usuario: encontrado.usuario }));
+      mostrarConteudo();
+    } catch(e){
+      erro.textContent = 'Não consegui verificar seu login. Confira sua internet.';
+    }
+  }
+
+  // restaura sessão já salva neste aparelho (feita na aba de gerar garantia, por exemplo)
+  const sessaoSalva = localStorage.getItem(CHAVE_SESSAO);
+  if (sessaoSalva){
+    mostrarConteudo();
+  }
+
+  function brl(n){ return (n || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+  function dataFormatada(iso){
+    const [ano, mes, dia] = iso.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
+
+  async function carregarDados(){
+    const lista = document.getElementById('listaGarantias');
+    if (!BIN_ID_GARANTIAS){
+      lista.innerHTML = '<div class="vazio">Bin ID de garantias ainda não configurado nesta página.</div>';
+      return;
+    }
+    lista.innerHTML = '<div class="vazio">Carregando...</div>';
+    try{
+      const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID_GARANTIAS}/latest`);
+      const json = await resp.json();
+      todasGarantias = (json.record && json.record.garantias) || [];
+      renderLista(todasGarantias);
+    } catch(e){
+      lista.innerHTML = '<div class="vazio">Não consegui carregar os dados. Tente atualizar novamente.</div>';
+    }
+  }
+  document.getElementById('btnAtualizar').addEventListener('click', carregarDados);
+
+  document.getElementById('inpBusca').addEventListener('input', (e) => {
+    const termo = e.target.value.trim().toLowerCase();
+    if (!termo){ renderLista(todasGarantias); return; }
+    const filtradas = todasGarantias.filter(g =>
+      (g.cliente || '').toLowerCase().includes(termo) ||
+      (g.produto || '').toLowerCase().includes(termo)
+    );
+    renderLista(filtradas);
+  });
+
+  function renderLista(garantias){
+    const lista = document.getElementById('listaGarantias');
+    lista.innerHTML = '';
+    if (garantias.length === 0){
+      lista.innerHTML = '<div class="vazio">Nenhuma garantia encontrada.</div>';
+      return;
+    }
+    garantias.forEach((g, i) => {
+      const item = document.createElement('div');
+      item.className = 'garantia-item';
+      item.innerHTML = `
+        <div class="g-topo">
+          <div>
+            <div class="g-cliente">${g.cliente || '—'}</div>
+            <div class="g-produto">${g.produto || '—'} · ${dataFormatada(g.data)}</div>
+          </div>
+          <div class="g-loja">${NOMES_LOJA[g.loja] || g.loja}</div>
+        </div>
+        <div class="g-detalhe" id="det-${i}">
+          <div class="linha"><span>Atendido por</span><b>${g.funcionario || '—'}</b></div>
+          <div class="linha"><span>Telefone</span><b>${g.telefone || '—'}</b></div>
+          <div class="linha"><span>Nº de série / IMEI</span><b>${g.serie || '—'}</b></div>
+          <div class="linha"><span>Valor da venda</span><b>${brl(g.valor)}</b></div>
+          <div class="linha"><span>Prazo de garantia</span><b>${g.prazoTexto || '—'}</b></div>
+          <div class="linha"><span>Válida até</span><b>${g.validade ? dataFormatada(g.validade) : '—'}</b></div>
+          ${g.troca ? `
+            <div class="linha"><span>Troca (aparelho)</span><b>${g.troca.modelo || '—'}</b></div>
+            <div class="linha"><span>IMEI da troca</span><b>${g.troca.imei || '—'}</b></div>
+            <div class="linha"><span>Valor abatido</span><b>${brl(g.troca.valor)}</b></div>
+          ` : ''}
+          ${g.fotoUrl ? `<img src="${g.fotoUrl}" style="max-width:100%; border-radius:8px; margin-top:10px;">` : ''}
+        </div>
+      `;
+      item.addEventListener('click', () => {
+        document.getElementById(`det-${i}`).classList.toggle('aberto');
+      });
+      lista.appendChild(item);
+    });
+  }
+</script>
+</body>
+</html>
