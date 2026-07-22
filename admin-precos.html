@@ -279,6 +279,29 @@
   }
   document.getElementById('btnSalvarNuvem').addEventListener('click', salvarNaNuvem);
 
+  // ---------- ordenação automática por modelo (número, variante, armazenamento) ----------
+  function chaveOrdenacao(nome){
+    const numeroMatch = nome.match(/(\d+)/);
+    const numero = numeroMatch ? parseInt(numeroMatch[1], 10) : 0;
+    let variante = 0; // padrão
+    if (/pro\s*max/i.test(nome)) variante = 3;
+    else if (/plus/i.test(nome)) variante = 1;
+    else if (/pro/i.test(nome)) variante = 2;
+    const storageMatch = nome.match(/(\d+)\s*GB/i);
+    const storage = storageMatch ? parseInt(storageMatch[1], 10) : 0;
+    return [numero, variante, storage];
+  }
+  function ordenarModelos(lista){
+    lista.sort((a, b) => {
+      const ka = chaveOrdenacao(a.nome), kb = chaveOrdenacao(b.nome);
+      for (let i = 0; i < 3; i++){
+        if (ka[i] !== kb[i]) return ka[i] - kb[i];
+      }
+      return a.nome.localeCompare(b.nome);
+    });
+    return lista;
+  }
+
   function carregarPrecos(){
     carregarConfig();
     const cfg = { binId: document.getElementById('inpBinId').value.trim() };
@@ -288,6 +311,8 @@
         .then(r => r.json())
         .then(resp => {
           precos = resp.record;
+          ordenarModelos(precos.modelosUsados);
+          ordenarModelos(precos.modelosNovos);
           renderLista('listaUsados', precos.modelosUsados, 'precoBase');
           renderLista('listaNovos', precos.modelosNovos, 'preco');
         })
@@ -305,6 +330,8 @@
       .then(r => r.json())
       .then(dados => {
         precos = dados;
+        ordenarModelos(precos.modelosUsados);
+        ordenarModelos(precos.modelosNovos);
         renderLista('listaUsados', precos.modelosUsados, 'precoBase');
         renderLista('listaNovos', precos.modelosNovos, 'preco');
       })
@@ -344,10 +371,12 @@
 
   document.getElementById('btnAddUsado').addEventListener('click', () => {
     precos.modelosUsados.push({ nome: 'Novo modelo', precoBase: 0 });
+    ordenarModelos(precos.modelosUsados);
     renderLista('listaUsados', precos.modelosUsados, 'precoBase');
   });
   document.getElementById('btnAddNovo').addEventListener('click', () => {
     precos.modelosNovos.push({ nome: 'Novo modelo', preco: 0 });
+    ordenarModelos(precos.modelosNovos);
     renderLista('listaNovos', precos.modelosNovos, 'preco');
   });
 
