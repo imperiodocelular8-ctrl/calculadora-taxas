@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)file:///C:/Users/eulor/Downloads/index_2.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0B0F0D">
+<title>Pai do Cell · Ambiente de Trabalho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./Pai do Cell · Ambiente de Trabalho_files/css2" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B0F0D;
+    --panel: #141917;
+    --panel-2: #101512;
+    --ink: #EAF3ED;
+    --ink-soft: #8FA69A;
+    --line: #24312B;
+    --teal: #19A94B;
+    --teal-deep: #0F6D30;
+    --amber: #2ECC63;
+    --amber-soft: #163823;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 28px -14px rgba(0,0,0,0.7);
+  }
+  *{ box-sizing: border-box; }
+  html, body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(234,243,237,0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 40px 16px 80px;
+  }
+  .wrap{
+    max-width: 920px;
+    margin: 0 auto;
+  }
+
+  /* ---------- header / logo ---------- */
+  header{ margin-bottom: 30px; }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .logo-mark{
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(155deg, #1EBD57, #0F6D30);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px -4px rgba(25,169,75,0.55);
+  }
+  .logo-mark svg{ width: 18px; height: 18px; }
+  .logo-text{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .logo-text span{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-top: 2px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #6FE39B;
+    background: #10281A;
+    display:inline-block;
+    padding: 4px 10px;
+    border-radius: 100px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(26px, 4vw, 34px);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .subtitle{
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    margin-top: 6px;
+    max-width: 50ch;
+  }
+
+  /* ---------- grid de atalhos ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 14px;
+    margin-top: 24px;
+  }
+  .card{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    color: var(--ink);
+    display:flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    transition: border-color .15s, transform .1s;
+    cursor: pointer;
+  }
+  .card:hover{ border-color: var(--teal); }
+  .card:active{ transform: scale(0.98); }
+  .card-icon{
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    background: var(--amber-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 21px;
+  }
+  .card-title{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 15.5px;
+    line-height: 1.3;
+  }
+  .card-desc{
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+  .card-remove{
+    position:absolute;
+    top: 12px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--panel-2);
+    color: var(--ink-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 13px;
+    line-height: 1;
+    opacity: 0;
+    transition: opacity .15s;
+  }
+  .card:hover .card-remove{ opacity: 1; }
+  .card-remove:hover{ border-color: #E5484D; color: #E5484D; }
+
+  /* card de adicionar */
+  .card-add{
+    background: transparent;
+    border: 1.5px dashed var(--line);
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color: var(--ink-soft);
+  }
+  .card-add:hover{ border-color: var(--teal); color: var(--teal); }
+  .card-add .card-icon{
+    background: transparent;
+    border: 1.5px dashed var(--line);
+    font-size: 22px;
+  }
+  .card-add:hover .card-icon{ border-color: var(--teal); }
+
+  footer{
+    text-align:center;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 34px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ---------- modal ---------- */
+  .overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding: 20px;
+    z-index: 50;
+  }
+  .overlay.aberto{ display:flex; }
+  .modal{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.8);
+  }
+  .modal h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 17px;
+    margin: 0 0 4px;
+  }
+  .modal p{
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: 0 0 18px;
+    line-height: 1.5;
+  }
+  .field{ margin-bottom: 14px; }
+  .field label{
+    display:block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .field input{
+    width: 100%;
+    padding: 11px 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    border: 1.5px solid var(--line);
+    border-radius: 9px;
+    background: #0E1310;
+    color: var(--ink);
+  }
+  .field input:focus{
+    outline:none;
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(25,169,75,0.18);
+  }
+  .icon-choices{
+    display:flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .icon-choices button{
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    border: 1.5px solid var(--line);
+    background: #0E1310;
+    font-size: 17px;
+    cursor: pointer;
+  }
+  .icon-choices button.selecionado{
+    border-color: var(--teal);
+    background: var(--amber-soft);
+  }
+  .modal-actions{
+    display:flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .btn{
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 13.5px;
+    cursor: pointer;
+  }
+  .btn-cancelar{
+    background: #0E1310;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+  }
+  .btn-salvar{
+    background: var(--teal);
+    color: #06170D;
+  }
+  .btn-salvar:hover{ filter: brightness(1.08); }
+
+  @media (max-width: 640px){
+    body{ padding: 24px 14px 90px; }
+    .grid{ grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+    .card{ padding: 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="2" width="12" height="20" rx="2.5" stroke="#06170D" stroke-width="1.8"></rect>
+          <line x1="9" y1="18.2" x2="15" y2="18.2" stroke="#06170D" stroke-width="1.8" stroke-linecap="round"></line>
+        </svg>
+      </div>
+      <div class="logo-text">Pai do Cell<span>Assistência &amp; Acessórios</span></div>
+    </div>
+    <span class="eyebrow">Uso interno · Equipe</span>
+    <h1>Ambiente de Trabalho</h1>
+    <p class="subtitle">Acesse as ferramentas internas da loja. Toque num atalho para abrir.</p>
+  </header>
+
+  <div class="grid" id="grid"><a class="card" href="file:///C:/Users/eulor/Downloads/calculadora-taxa-cartao.html">
+        <div class="card-icon">💳</div>
+        <div class="card-title">Calculadora de Taxa de Cartão</div>
+        <div class="card-desc">Calcule o valor a cobrar por forma de pagamento.</div>
+        
+      </a><div class="card card-add">
+      <div class="card-icon">＋</div>
+      <div class="card-title">Adicionar atalho</div>
+    </div></div>
+
+  <footer>Pai do Cell — painel interno</footer>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2>Novo atalho</h2>
+    <p>Adicione o link de uma ferramenta (ex: a calculadora de taxa de cartão) para aparecer aqui no painel.</p>
+    <div class="field">
+      <label for="inpNome">Nome do atalho</label>
+      <input id="inpNome" type="text" placeholder="Ex: Calculadora de Taxa">
+    </div>
+    <div class="field">
+      <label for="inpLink">Link (URL)</label>
+      <input id="inpLink" type="text" placeholder="Ex: calculadora-taxa-cartao.html">
+    </div>
+    <div class="field">
+      <label>Ícone</label>
+      <div class="icon-choices" id="iconChoices"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancelar" id="btnCancelar">Cancelar</button>
+      <button class="btn btn-salvar" id="btnSalvar">Salvar atalho</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Atalhos padrão — edite esta lista diretamente no código para que
+  // apareçam para TODOS os funcionários, em qualquer aparelho.
+  const atalhosPadrao = [
+    {
+      nome: "Calculadora de Taxa de Cartão",
+      desc: "Calcule o valor a cobrar por forma de pagamento.",
+      link: "calculadora-taxa-cartao.html",
+      icone: "💳",
+      fixo: true
+    }
+  ];
+
+  const icones = ["🧮","💳","📋","📦","🔧","📱","💰","🗂️","🛠️","📊"];
+  let iconeSelecionado = icones[0];
+
+  const grid = document.getElementById('grid');
+  const overlay = document.getElementById('overlay');
+  const iconChoices = document.getElementById('iconChoices');
+
+  function carregarAtalhosCustom(){
+    try{
+      const dados = localStorage.getItem('paidocell_atalhos');
+      return dados ? JSON.parse(dados) : [];
+    }catch(e){
+      return [];
+    }
+  }
+
+  function salvarAtalhosCustom(lista){
+    localStorage.setItem('paidocell_atalhos', JSON.stringify(lista));
+  }
+
+  function renderGrid(){
+    const custom = carregarAtalhosCustom();
+    const todos = [...atalhosPadrao, ...custom];
+    grid.innerHTML = '';
+
+    todos.forEach((a, i) => {
+      const card = document.createElement('a');
+      card.className = 'card';
+      card.href = a.link;
+      card.innerHTML = `
+        <div class="card-icon">${a.icone || '🔗'}</div>
+        <div class="card-title">${a.nome}</div>
+        <div class="card-desc">${a.desc || ''}</div>
+        ${a.fixo ? '' : '<div class="card-remove" data-remove="' + (i - atalhosPadrao.length) + '">✕</div>'}
+      `;
+      grid.appendChild(card);
+    });
+
+    // card de adicionar
+    const addCard = document.createElement('div');
+    addCard.className = 'card card-add';
+    addCard.innerHTML = `
+      <div class="card-icon">＋</div>
+      <div class="card-title">Adicionar atalho</div>
+    `;
+    addCard.addEventListener('click', abrirModal);
+    grid.appendChild(addCard);
+
+    // botões de remover
+    grid.querySelectorAll('[data-remove]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const idx = parseInt(btn.dataset.remove, 10);
+        const custom = carregarAtalhosCustom();
+        custom.splice(idx, 1);
+        salvarAtalhosCustom(custom);
+        renderGrid();
+      });
+    });
+  }
+
+  function montarIcones(){
+    iconChoices.innerHTML = '';
+    icones.forEach(ic => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = ic;
+      if (ic === iconeSelecionado) btn.classList.add('selecionado');
+      btn.addEventListener('click', () => {
+        iconeSelecionado = ic;
+        montarIcones();
+      });
+      iconChoices.appendChild(btn);
+    });
+  }
+
+  function abrirModal(){
+    document.getElementById('inpNome').value = '';
+    document.getElementById('inpLink').value = '';
+    iconeSelecionado = icones[0];
+    montarIcones();
+    overlay.classList.add('aberto');
+  }
+
+  function fecharModal(){
+    overlay.classList.remove('aberto');
+  }
+
+  document.getElementById('btnCancelar').addEventListener('click', fecharModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) fecharModal(); });
+
+  document.getElementById('btnSalvar').addEventListener('click', () => {
+    const nome = document.getElementById('inpNome').value.trim();
+    const link = document.getElementById('inpLink').value.trim();
+    if (!nome || !link){
+      alert('Preencha o nome e o link do atalho.');
+      return;
+    }
+    const custom = carregarAtalhosCustom();
+    custom.push({ nome, link, icone: iconeSelecionado, desc: '' });
+    salvarAtalhosCustom(custom);
+    fecharModal();
+    renderGrid();
+  });
+
+  renderGrid();
+</script>
+
+
+</body></html>
