@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)file:///C:/Users/eulor/Downloads/calculadora-upgrade-seminovo_4.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0B0F0D">
+<title>Pai do Cell · Calculadora de Upgrade Semi-novo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./Pai do Cell · Calculadora de Upgrade Semi-novo 2_files/css2" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B0F0D;
+    --panel: #141917;
+    --ink: #EAF3ED;
+    --ink-soft: #8FA69A;
+    --line: #24312B;
+    --teal: #19A94B;
+    --teal-deep: #0F6D30;
+    --amber: #2ECC63;
+    --amber-soft: #163823;
+    --red: #E5484D;
+    --red-soft: #331416;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 28px -14px rgba(0,0,0,0.7);
+  }
+  *{ box-sizing: border-box; }
+  html, body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(234,243,237,0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 40px 16px 90px;
+  }
+  .wrap{ max-width: 880px; margin: 0 auto; }
+
+  /* ---------- header ---------- */
+  .voltar-link{
+    display:inline-block;
+    font-family:'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 10px;
+  }
+  .voltar-link:hover{ color: var(--teal); }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .logo-mark{
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(155deg, #1EBD57, #0F6D30);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px -4px rgba(25,169,75,0.55);
+  }
+  .logo-mark svg{ width: 18px; height: 18px; }
+  .logo-text{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .logo-text span{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-top: 2px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #6FE39B;
+    background: #10281A;
+    display:inline-block;
+    padding: 4px 10px;
+    border-radius: 100px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(24px, 4vw, 32px);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .subtitle{
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin-top: 6px;
+    max-width: 52ch;
+  }
+  header{ margin-bottom: 24px; }
+
+  /* ---------- panels ---------- */
+  .panel{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+  .panel h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    display:flex;
+    align-items:center;
+    gap: 8px;
+  }
+  .panel h2 .num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: #06170D;
+    background: var(--teal);
+    width: 20px; height: 20px;
+    border-radius: 6px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .panel-hint{
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin: 0 0 16px;
+  }
+
+  .field{ margin-bottom: 14px; }
+  .field:last-child{ margin-bottom: 0; }
+  .field label{
+    display:block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: 7px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  select, .field input{
+    width: 100%;
+    padding: 12px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    font-weight: 500;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    background: #0E1310;
+    color: var(--ink);
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  select{
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%238FA69A'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 18px;
+    padding-right: 38px;
+  }
+  select:focus, .field input:focus{
+    outline:none;
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(25,169,75,0.18);
+  }
+
+  .checklist-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .checkbox-row{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    margin-top: 4px;
+    padding: 11px 14px;
+    background: #0E1310;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+  }
+  .checkbox-row input{ width: 17px; height: 17px; accent-color: var(--teal); }
+  .checkbox-row label{
+    margin: 0;
+    text-transform: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0;
+  }
+
+  /* ---------- laudo / resultado ---------- */
+  .laudo{
+    background: #0D1F13;
+    border: 1px solid #1E3A28;
+    border-radius: 16px;
+    padding: 22px 24px;
+    box-shadow: 0 16px 40px -18px rgba(0,0,0,0.7);
+  }
+  .laudo-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #57C784;
+    margin-bottom: 4px;
+  }
+  .laudo-modelo{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+  .laudo-row{
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 7px 0;
+    border-top: 1px dashed rgba(87,199,132,0.2);
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: #A9D9BC;
+  }
+  .laudo-row.desconto span:last-child{ color: #F5A97F; }
+  .laudo-row.total{
+    border-top: 1px solid rgba(87,199,132,0.4);
+    margin-top: 4px;
+    padding-top: 12px;
+    font-size: 14px;
+  }
+  .laudo-row.total .lv{ font-size: 22px; font-weight: 700; color: #4FE38B; }
+  .lv{ font-weight: 600; }
+
+  .divisor{
+    height: 1px;
+    background: rgba(87,199,132,0.2);
+    margin: 16px 0;
+  }
+
+  .resultado-final{
+    text-align:center;
+    padding: 18px 14px;
+    border-radius: 12px;
+    margin-top: 6px;
+  }
+  .resultado-final.pagar{ background: rgba(46,204,99,0.1); border: 1px solid rgba(46,204,99,0.35); }
+  .resultado-final.troco{ background: rgba(229,72,77,0.08); border: 1px solid rgba(229,72,77,0.3); }
+  .resultado-final .rf-label{
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .resultado-final .rf-valor{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+  }
+  .resultado-final.pagar .rf-valor{ color: #4FE38B; }
+  .resultado-final.troco .rf-valor{ color: #F5A97F; }
+
+  .whatsapp-btn{
+    width: 100%;
+    margin-top: 18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 9px;
+    background: #25D366;
+    color: #062B17;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 16px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: filter .15s, transform .1s;
+  }
+  .whatsapp-btn:hover{ filter: brightness(1.08); }
+  .whatsapp-btn:active{ transform: scale(0.98); }
+  .whatsapp-btn svg{ width: 18px; height: 18px; flex-shrink: 0; }
+
+  footer{
+    text-align:center;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  @media (max-width: 640px){
+    body{ padding: 20px 12px 90px; }
+    .panel{ padding: 16px; }
+    .checklist-grid{ grid-template-columns: 1fr; }
+    h1{ font-size: 23px; }
+    .resultado-final .rf-valor{ font-size: 27px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <a href="file:///C:/Users/eulor/Downloads/index.html" class="voltar-link">← Voltar ao painel</a>
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="2" width="12" height="20" rx="2.5" stroke="#06170D" stroke-width="1.8"></rect>
+          <line x1="9" y1="18.2" x2="15" y2="18.2" stroke="#06170D" stroke-width="1.8" stroke-linecap="round"></line>
+        </svg>
+      </div>
+      <div class="logo-text">Pai do Cell<span>Assistência &amp; Acessórios</span></div>
+    </div>
+    <span class="eyebrow">Uso interno · Avaliação de troca</span>
+    <h1>Calculadora de Upgrade Semi-novo</h1>
+    <p class="subtitle">Avalie o iPhone usado do cliente e veja na hora o valor de troca e quanto falta pagar pelo novo.</p>
+  </header>
+
+  <section class="panel">
+    <h2><span class="num">1</span> Aparelho usado (entrada)</h2>
+    <p class="panel-hint">Selecione o modelo e o estado real do aparelho do cliente.</p>
+
+    <div class="field">
+      <label for="selModeloUsado">Modelo do aparelho usado</label>
+      <select id="selModeloUsado"><option value="0">iPhone 11 64GB</option><option value="1">iPhone 11 128GB</option></select>
+    </div>
+
+    <div class="field">
+      <label for="inpPrecoBaseUsado">Valor base (definido pela administração)</label>
+      <input type="number" id="inpPrecoBaseUsado" step="0.01" min="0" readonly="" style="opacity:0.75; cursor:not-allowed;">
+    </div>
+
+    <div class="checklist-grid">
+      <div class="field">
+        <label for="selTela">Tela</label>
+        <select id="selTela"><option value="0">Perfeita, sem riscos</option><option value="1">Micro-riscos (só com luz)</option><option value="2">Riscada (visível a olho nu)</option><option value="3">Trincada ou quebrada</option></select>
+      </div>
+      <div class="field">
+        <label for="selBateria">Saúde da bateria</label>
+        <select id="selBateria"><option value="0">90% a 100%</option><option value="1">85% a 89%</option><option value="2">80% a 84%</option><option value="3">Abaixo de 80%</option></select>
+      </div>
+      <div class="field">
+        <label for="selCarcaca">Carcaça</label>
+        <select id="selCarcaca"><option value="0">Perfeita</option><option value="1">Riscos leves</option><option value="2">Amassados ou riscos profundos</option><option value="3">Trincada / rachada</option></select>
+      </div>
+      <div class="field">
+        <label for="selFuncionamento">Funcionamento</label>
+        <select id="selFuncionamento"><option value="0">Tudo funcionando perfeitamente</option><option value="1">Defeito leve (câmera, Face ID, botão, alto-falante)</option><option value="2">Não liga ou defeito grave</option></select>
+      </div>
+    </div>
+
+    <div class="checkbox-row">
+      <input type="checkbox" id="chkAcessorios">
+      <label for="chkAcessorios">Acompanha caixa e acessórios originais</label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2><span class="num">2</span> Aparelho desejado (novo/semi-novo)</h2>
+    <p class="panel-hint">O que o cliente quer levar na troca. Escolha da lista ou digite manualmente.</p>
+    <div class="field">
+      <label for="selModeloNovo">Modelo desejado</label>
+      <select id="selModeloNovo"><option value="0">iPhone 12 128GB</option><option value="outro">Outro (digitar manualmente)</option></select>
+    </div>
+    <div class="field" id="fieldNomeManual" style="display:none;">
+      <label for="inpNomeNovoManual">Nome do aparelho</label>
+      <input type="text" id="inpNomeNovoManual" placeholder="Ex: iPhone 16 Plus 256GB">
+    </div>
+    <div class="field">
+      <label for="inpPrecoNovo">Preço do aparelho desejado (editável, R$)</label>
+      <input type="number" id="inpPrecoNovo" step="0.01" min="0">
+    </div>
+  </section>
+
+  <section class="panel laudo">
+    <div class="laudo-label">Laudo de avaliação</div>
+    <div class="laudo-modelo" id="laudoModelo">iPhone 11 64GB</div>
+
+    <div class="laudo-row">
+      <span>Valor base (100% conservado)</span>
+      <span class="lv" id="lvBase">R$&nbsp;600,00</span>
+    </div>
+    <div id="laudoDescontos"></div>
+    <div class="laudo-row" id="linhaAcessorios" style="display:none;">
+      <span>Bônus acessórios originais</span>
+      <span class="lv" id="lvAcessorios">+R$ 0,00</span>
+    </div>
+    <div class="laudo-row total">
+      <span>Valor de troca do usado</span>
+      <span class="lv" id="lvTroca">R$&nbsp;600,00</span>
+    </div>
+
+    <div class="divisor"></div>
+
+    <div class="laudo-row">
+      <span>Aparelho desejado</span>
+      <span class="lv" id="lvModeloNovo">iPhone 12 128GB</span>
+    </div>
+    <div class="laudo-row">
+      <span>Preço do aparelho desejado</span>
+      <span class="lv" id="lvPrecoNovo">R$&nbsp;1.450,00</span>
+    </div>
+
+    <div class="resultado-final pagar" id="resultadoFinal">
+      <div class="rf-label" id="rfLabel">Cliente paga a mais</div>
+      <div class="rf-valor" id="rfValor">R$&nbsp;850,00</div>
+    </div>
+
+    <button class="whatsapp-btn" id="btnWhatsapp" type="button" data-link="https://wa.me/?text=*Pai%20do%20Cell%20%E2%80%94%20Avalia%C3%A7%C3%A3o%20de%20troca*%0A%0AAparelho%20usado%3A%20iPhone%2011%2064GB%0A*Valor%20de%20troca%3A%20R%24%C2%A0600%2C00*%0A%0AAparelho%20desejado%3A%20iPhone%2012%20128GB%0APre%C3%A7o%3A%20R%24%C2%A01.450%2C00%0A%0A*Cliente%20paga%20a%20mais%3A%20R%24%C2%A0850%2C00*">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6l.4-.5c.1-.1.2-.3.2-.4.1-.1 0-.3 0-.4-.1-.1-.6-1.4-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.3-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.6.2 1.1.1 1.5.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1-.1-.1-.2-.1-.4-.2z"></path><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.6 1.4 5.1L2 22l5-1.4c1.4.8 3.1 1.2 4.9 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.2-.4-4.5-1.2l-.3-.2-3 .8.8-2.9-.2-.3C4 15 3.5 13.5 3.5 12c0-4.7 3.8-8.5 8.5-8.5s8.5 3.8 8.5 8.5-3.8 8.5-8.5 8.5z"></path></svg>
+      Compartilhar no WhatsApp
+    </button>
+  </section>
+
+  <footer>Pai do Cell — uso interno · valores base editáveis apenas no código pela administração.</footer>
+</div>
+
+<script>
+  // =====================================================================
+  // TABELA DE PREÇOS BASE — valores de EXEMPLO. Edite aqui conforme sua
+  // tabela real. "precoBase" = valor do aparelho 100% conservado (nota A).
+  // =====================================================================
+  // As tabelas de preço agora vêm do arquivo precos.json (editado só pelo admin).
+  // Estes valores abaixo são só um fallback, caso o precos.json não carregue.
+  let modelosUsados = [
+    { nome: "iPhone 11 64GB",        precoBase: 600 },
+    { nome: "iPhone 11 128GB",       precoBase: 600 },
+  ];
+  let modelosNovos = [
+    { nome: "iPhone 12 128GB",       preco: 1450 },
+  ];
+
+  // Opções de checklist e o desconto (fração do valor base) que cada uma aplica.
+  const opcoesTela = [
+    { label: "Perfeita, sem riscos", desconto: 0 },
+    { label: "Micro-riscos (só com luz)", desconto: 0.05 },
+    { label: "Riscada (visível a olho nu)", desconto: 0.12 },
+    { label: "Trincada ou quebrada", desconto: 0.30 },
+  ];
+  const opcoesBateria = [
+    { label: "90% a 100%", desconto: 0 },
+    { label: "85% a 89%", desconto: 0.05 },
+    { label: "80% a 84%", desconto: 0.10 },
+    { label: "Abaixo de 80%", desconto: 0.18 },
+  ];
+  const opcoesCarcaca = [
+    { label: "Perfeita", desconto: 0 },
+    { label: "Riscos leves", desconto: 0.04 },
+    { label: "Amassados ou riscos profundos", desconto: 0.10 },
+    { label: "Trincada / rachada", desconto: 0.20 },
+  ];
+  const opcoesFuncionamento = [
+    { label: "Tudo funcionando perfeitamente", desconto: 0 },
+    { label: "Defeito leve (câmera, Face ID, botão, alto-falante)", desconto: 0.3 },
+    { label: "Não liga ou defeito grave", desconto: 0.7 },
+  ];
+
+  const BONUS_ACESSORIOS = 0.03;   // +3% se tiver caixa e acessórios
+  const DESCONTO_MAXIMO = 0.85;    // nunca desconta mais que 85% do valor base
+
+  function brl(n){
+    return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  function preencherSelect(select, opcoes, labelKey, valorKey){
+    select.innerHTML = opcoes.map((o, i) =>
+      `<option value="${i}">${o[labelKey]}</option>`
+    ).join('');
+  }
+
+  const selModeloUsado = document.getElementById('selModeloUsado');
+  const selModeloNovo = document.getElementById('selModeloNovo');
+  const selTela = document.getElementById('selTela');
+  const selBateria = document.getElementById('selBateria');
+  const selCarcaca = document.getElementById('selCarcaca');
+  const selFuncionamento = document.getElementById('selFuncionamento');
+  const chkAcessorios = document.getElementById('chkAcessorios');
+  const inpPrecoBaseUsado = document.getElementById('inpPrecoBaseUsado');
+  const inpPrecoNovo = document.getElementById('inpPrecoNovo');
+  const inpNomeNovoManual = document.getElementById('inpNomeNovoManual');
+  const fieldNomeManual = document.getElementById('fieldNomeManual');
+
+  preencherSelect(selTela, opcoesTela, 'label');
+  preencherSelect(selBateria, opcoesBateria, 'label');
+  preencherSelect(selCarcaca, opcoesCarcaca, 'label');
+  preencherSelect(selFuncionamento, opcoesFuncionamento, 'label');
+
+  function montarListaModelos(){
+    preencherSelect(selModeloUsado, modelosUsados, 'nome');
+    preencherSelect(selModeloNovo, modelosNovos, 'nome');
+
+    // opção extra para digitar um aparelho que não está na lista
+    const optOutro = document.createElement('option');
+    optOutro.value = 'outro';
+    optOutro.textContent = 'Outro (digitar manualmente)';
+    selModeloNovo.appendChild(optOutro);
+
+    inpPrecoBaseUsado.value = modelosUsados[0].precoBase;
+    inpPrecoNovo.value = modelosNovos[0].preco;
+    calcular();
+  }
+
+  // ao trocar o modelo usado, atualiza o campo de preço base (somente leitura)
+  selModeloUsado.addEventListener('change', () => {
+    inpPrecoBaseUsado.value = modelosUsados[selModeloUsado.value].precoBase;
+    calcular();
+  });
+
+  // ao trocar o modelo desejado, preenche o preço editável (ou libera o nome manual)
+  selModeloNovo.addEventListener('change', () => {
+    if (selModeloNovo.value === 'outro'){
+      fieldNomeManual.style.display = 'block';
+      inpNomeNovoManual.value = '';
+      inpPrecoNovo.value = '';
+    } else {
+      fieldNomeManual.style.display = 'none';
+      inpPrecoNovo.value = modelosNovos[selModeloNovo.value].preco;
+    }
+    calcular();
+  });
+
+  // Cole aqui o Bin ID gerado no jsonbin.io (o mesmo configurado no admin-precos.html)
+  // para que a calculadora sempre puxe os preços mais atuais, em qualquer aparelho.
+  // Deixe em branco para usar o arquivo precos.json local como antes.
+  const BIN_ID_PRECOS = "";
+
+  function aplicarPrecos(dados){
+    if (Array.isArray(dados.modelosUsados) && dados.modelosUsados.length){
+      modelosUsados = dados.modelosUsados;
+    }
+    if (Array.isArray(dados.modelosNovos) && dados.modelosNovos.length){
+      modelosNovos = dados.modelosNovos;
+    }
+    montarListaModelos();
+  }
+
+  // busca a tabela de preços atualizada (editada só pelo admin no painel)
+  if (BIN_ID_PRECOS){
+    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID_PRECOS}/latest`)
+      .then(r => r.json())
+      .then(resp => aplicarPrecos(resp.record))
+      .catch(() => {
+        // se a nuvem falhar, tenta o arquivo local antes de cair no fallback fixo
+        fetch('precos.json').then(r => r.json()).then(aplicarPrecos).catch(montarListaModelos);
+      });
+  } else {
+    fetch('precos.json')
+      .then(r => r.json())
+      .then(aplicarPrecos)
+      .catch(() => {
+        // se não conseguir carregar o precos.json, segue com os valores de fallback
+        montarListaModelos();
+      });
+  }
+
+  function calcular(){
+    const usado = modelosUsados[selModeloUsado.value];
+    const precoBaseUsado = parseFloat(inpPrecoBaseUsado.value) || 0;
+
+    const ehOutro = selModeloNovo.value === 'outro';
+    const nomeNovo = ehOutro
+      ? (inpNomeNovoManual.value.trim() || 'Aparelho digitado manualmente')
+      : modelosNovos[selModeloNovo.value].nome;
+    const precoNovo = parseFloat(inpPrecoNovo.value) || 0;
+
+    const tela = opcoesTela[selTela.value];
+    const bateria = opcoesBateria[selBateria.value];
+    const carcaca = opcoesCarcaca[selCarcaca.value];
+    const func = opcoesFuncionamento[selFuncionamento.value];
+
+    const descontos = [
+      { nome: 'Tela', item: tela },
+      { nome: 'Bateria', item: bateria },
+      { nome: 'Carcaça', item: carcaca },
+      { nome: 'Funcionamento', item: func },
+    ].filter(d => d.item.desconto > 0);
+
+    let fracaoDesconto = tela.desconto + bateria.desconto + carcaca.desconto + func.desconto;
+    fracaoDesconto = Math.min(fracaoDesconto, DESCONTO_MAXIMO);
+
+    let valorTroca = precoBaseUsado * (1 - fracaoDesconto);
+    let bonus = 0;
+    if (chkAcessorios.checked){
+      bonus = precoBaseUsado * BONUS_ACESSORIOS;
+      valorTroca += bonus;
+    }
+    valorTroca = Math.min(valorTroca, precoBaseUsado); // nunca passa do valor base
+    valorTroca = Math.max(valorTroca, 0);
+
+    const diferenca = precoNovo - valorTroca;
+
+    // ---------- atualiza o laudo na tela ----------
+    document.getElementById('laudoModelo').textContent = usado.nome;
+    document.getElementById('lvBase').textContent = brl(precoBaseUsado);
+
+    const laudoDescontos = document.getElementById('laudoDescontos');
+    laudoDescontos.innerHTML = descontos.map(d => `
+      <div class="laudo-row desconto">
+        <span>${d.nome} — ${d.item.label}</span>
+        <span>-${(d.item.desconto * 100).toFixed(0)}%</span>
+      </div>
+    `).join('');
+
+    const linhaAcessorios = document.getElementById('linhaAcessorios');
+    if (chkAcessorios.checked){
+      linhaAcessorios.style.display = 'flex';
+      document.getElementById('lvAcessorios').textContent = `+${brl(bonus)}`;
+    } else {
+      linhaAcessorios.style.display = 'none';
+    }
+
+    document.getElementById('lvTroca').textContent = brl(valorTroca);
+    document.getElementById('lvModeloNovo').textContent = nomeNovo;
+    document.getElementById('lvPrecoNovo').textContent = brl(precoNovo);
+
+    const resultadoFinal = document.getElementById('resultadoFinal');
+    const rfLabel = document.getElementById('rfLabel');
+    const rfValor = document.getElementById('rfValor');
+    if (diferenca >= 0){
+      resultadoFinal.className = 'resultado-final pagar';
+      rfLabel.textContent = 'Cliente paga a mais';
+      rfValor.textContent = brl(diferenca);
+    } else {
+      resultadoFinal.className = 'resultado-final troco';
+      rfLabel.textContent = 'Valor de troca excede o novo — crédito ao cliente';
+      rfValor.textContent = brl(Math.abs(diferenca));
+    }
+
+    // ---------- mensagem do WhatsApp ----------
+    let linhas = [
+      `*Pai do Cell — Avaliação de troca*`,
+      ``,
+      `Aparelho usado: ${usado.nome}`,
+    ];
+    descontos.forEach(d => linhas.push(`• ${d.nome}: ${d.item.label} (-${(d.item.desconto*100).toFixed(0)}%)`));
+    if (chkAcessorios.checked) linhas.push(`• Com caixa e acessórios originais (+${(BONUS_ACESSORIOS*100).toFixed(0)}%)`);
+    linhas.push(`*Valor de troca: ${brl(valorTroca)}*`);
+    linhas.push(``);
+    linhas.push(`Aparelho desejado: ${nomeNovo}`);
+    linhas.push(`Preço: ${brl(precoNovo)}`);
+    linhas.push(``);
+    if (diferenca >= 0){
+      linhas.push(`*Cliente paga a mais: ${brl(diferenca)}*`);
+    } else {
+      linhas.push(`*Crédito ao cliente: ${brl(Math.abs(diferenca))}*`);
+    }
+    const mensagem = encodeURIComponent(linhas.join('\n'));
+    document.getElementById('btnWhatsapp').dataset.link = `https://wa.me/?text=${mensagem}`;
+  }
+
+  [selTela, selBateria, selCarcaca, selFuncionamento].forEach(el => {
+    el.addEventListener('change', calcular);
+  });
+  chkAcessorios.addEventListener('change', calcular);
+  inpPrecoBaseUsado.addEventListener('input', calcular);
+  inpPrecoNovo.addEventListener('input', calcular);
+  inpNomeNovoManual.addEventListener('input', calcular);
+
+  document.getElementById('btnWhatsapp').addEventListener('click', function(){
+    window.open(this.dataset.link, '_blank');
+  });
+</script>
+
+
+</body></html>

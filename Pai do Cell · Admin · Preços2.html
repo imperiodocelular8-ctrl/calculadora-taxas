@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)file:///C:/Users/eulor/Downloads/admin-precos.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0B0F0D">
+<title>Pai do Cell · Admin · Preços</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./Pai do Cell · Admin · Preços2_files/css2" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B0F0D; --panel: #141917; --ink: #EAF3ED; --ink-soft: #8FA69A;
+    --line: #24312B; --teal: #19A94B; --teal-deep: #0F6D30; --amber: #2ECC63;
+    --amber-soft: #163823; --red: #E5484D;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 28px -14px rgba(0,0,0,0.7);
+  }
+  *{ box-sizing: border-box; }
+  html, body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    background-image: radial-gradient(circle at 1px 1px, rgba(234,243,237,0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+    color: var(--ink); font-family: 'Inter', sans-serif; min-height: 100vh; padding: 40px 16px 90px;
+  }
+  .wrap{ max-width: 760px; margin: 0 auto; }
+  .voltar-link{ display:inline-block; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); text-decoration: none; margin-bottom: 10px; }
+  .voltar-link:hover{ color: var(--teal); }
+  .logo{ display:flex; align-items:center; gap: 10px; margin-bottom: 18px; }
+  .logo-mark{
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(155deg, #1EBD57, #0F6D30);
+    display:flex; align-items:center; justify-content:center; flex-shrink: 0;
+    box-shadow: 0 4px 14px -4px rgba(25,169,75,0.55);
+  }
+  .logo-mark svg{ width: 18px; height: 18px; }
+  .logo-text{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 17px; color: var(--ink); line-height: 1.1; }
+  .logo-text span{ display:block; font-family:'IBM Plex Mono', monospace; font-weight: 600; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); margin-top: 2px; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #F5A97F; background: #331E10; display:inline-block; padding: 4px 10px; border-radius: 100px;
+    margin-bottom: 10px; font-weight: 600;
+  }
+  h1{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(24px, 4vw, 30px); margin: 0; }
+  .subtitle{ color: var(--ink-soft); font-size: 14px; margin-top: 6px; max-width: 56ch; }
+  header{ margin-bottom: 22px; }
+
+  .gate{
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    padding: 28px; box-shadow: var(--shadow); text-align:center;
+  }
+  .gate p{ color: var(--ink-soft); font-size: 13.5px; margin: 6px 0 18px; }
+  .gate input{
+    width: 100%; max-width: 260px; padding: 12px 14px; font-size: 15px; text-align:center;
+    border: 1.5px solid var(--line); border-radius: 10px; background: #0E1310; color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .gate input:focus{ outline:none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(25,169,75,0.18); }
+  .gate button{
+    padding: 12px 22px; border-radius: 10px; border: none; background: var(--teal);
+    color: #06170D; font-weight: 700; font-size: 14px; cursor: pointer;
+  }
+  .gate button:hover{ filter: brightness(1.08); }
+  .gate .erro{ color: var(--red); font-size: 12.5px; margin-top: 10px; display:none; }
+
+  .aviso{
+    background: var(--amber-soft); border: 1px solid rgba(46,204,99,0.35); border-radius: 12px;
+    padding: 12px 16px; font-size: 12.5px; color: #B9E8CC; line-height: 1.5; margin-bottom: 20px;
+  }
+  .aviso b{ color: #fff; }
+
+  #painelAdmin{ display:none; }
+
+  .panel{ background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 22px; margin-bottom: 16px; }
+  .panel h2{ font-family:'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; margin: 0 0 4px; display:flex; align-items:center; gap: 8px; }
+  .panel h2 .num{ font-family:'IBM Plex Mono', monospace; font-size: 12px; color: #06170D; background: var(--teal); width: 20px; height: 20px; border-radius: 6px; display:inline-flex; align-items:center; justify-content:center; }
+  .panel-hint{ font-size: 12px; color: var(--ink-soft); margin: 0 0 16px; }
+
+  .linha-preco{
+    display:grid; grid-template-columns: 1fr 130px 34px; gap: 8px; margin-bottom: 8px; align-items:center;
+  }
+  .linha-preco input{
+    padding: 9px 11px; font-size: 13.5px; border: 1.5px solid var(--line); border-radius: 8px;
+    background: #0E1310; color: var(--ink);
+  }
+  .linha-preco input:focus{ outline:none; border-color: var(--teal); }
+  .linha-preco .lp-remove{
+    width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--line); background: transparent;
+    color: var(--ink-soft); cursor: pointer; font-size: 13px;
+  }
+  .linha-preco .lp-remove:hover{ border-color: var(--red); color: var(--red); }
+
+  .btn-add-linha{
+    width: 100%; padding: 10px; margin-top: 6px; border-radius: 9px; border: 1.5px dashed var(--line);
+    background: transparent; color: var(--ink-soft); font-weight: 600; font-size: 13px; cursor: pointer;
+  }
+  .btn-add-linha:hover{ border-color: var(--teal); color: var(--teal); }
+
+  .btn-baixar{
+    width: 100%; margin-top: 20px; padding: 14px 16px; border-radius: 10px; border: none;
+    background: var(--teal); color: #06170D; font-weight: 700; font-size: 14.5px; cursor: pointer;
+  }
+  .btn-baixar:hover{ filter: brightness(1.08); }
+
+  footer{ text-align:center; font-size: 12px; color: var(--ink-soft); margin-top: 26px; font-family: 'IBM Plex Mono', monospace; }
+
+  @media (max-width: 640px){
+    body{ padding: 20px 12px 90px; }
+    .panel{ padding: 16px; }
+    .linha-preco{ grid-template-columns: 1fr 100px 30px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <a href="file:///C:/Users/eulor/Downloads/index.html" class="voltar-link">← Voltar ao painel</a>
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="2" width="12" height="20" rx="2.5" stroke="#06170D" stroke-width="1.8"></rect>
+          <line x1="9" y1="18.2" x2="15" y2="18.2" stroke="#06170D" stroke-width="1.8" stroke-linecap="round"></line>
+        </svg>
+      </div>
+      <div class="logo-text">Pai do Cell<span>Assistência &amp; Acessórios</span></div>
+    </div>
+    <span class="eyebrow">🔒 Acesso restrito · Administração</span>
+    <h1>Editar Tabela de Preços</h1>
+    <p class="subtitle">Área exclusiva do administrador para atualizar os valores usados na Calculadora de Upgrade Semi-novo.</p>
+  </header>
+
+  <div class="gate" id="gate">
+    <p>Digite a senha de administrador para editar os preços.</p>
+    <input type="password" id="inpSenha" placeholder="Senha">
+    <br>
+    <button id="btnEntrar">Entrar</button>
+    <div class="erro" id="msgErro">Senha incorreta.</div>
+  </div>
+
+  <div id="painelAdmin">
+    <div class="aviso">
+      <b>Como funciona:</b> edite os valores abaixo e clique em "Baixar precos.json atualizado".
+      Depois, suba esse arquivo no GitHub substituindo o <b>precos.json</b> que já está no repositório —
+      a calculadora usada pelos funcionários passa a usar os novos valores automaticamente.
+    </div>
+
+    <section class="panel">
+      <h2><span class="num">1</span> Aparelhos usados (valor de troca)</h2>
+      <p class="panel-hint">Valor base de cada modelo, 100% conservado (nota A).</p>
+      <div id="listaUsados"></div>
+      <button class="btn-add-linha" id="btnAddUsado" type="button">+ Adicionar modelo</button>
+    </section>
+
+    <section class="panel">
+      <h2><span class="num">2</span> Aparelhos novos/semi-novos (preço de venda)</h2>
+      <p class="panel-hint">Preço de venda de cada modelo oferecido no upgrade.</p>
+      <div id="listaNovos"></div>
+      <button class="btn-add-linha" id="btnAddNovo" type="button">+ Adicionar modelo</button>
+    </section>
+
+    <section class="panel">
+      <h2><span class="num">3</span> Conexão com o armazenamento de preços</h2>
+      <p class="panel-hint">Preencha uma vez — fica salvo neste navegador. Com isso, ao salvar, os preços já atualizam na hora pra todo mundo, sem precisar subir arquivo em lugar nenhum.</p>
+      <div class="field">
+        <label for="inpBinId">Bin ID (do jsonbin.io)</label>
+        <input type="text" id="inpBinId" placeholder="6a60b292da38895dfe7f2e27">
+      </div>
+      <div class="field">
+        <label for="inpMasterKey">Chave mestra (X-Master-Key)</label>
+        <input type="password" id="inpMasterKey" placeholder="$2a$10$43Is9xAci.UxnyQhE6wCIOUJ.uQYXOH3rG5TSChatzo3Np7Z2pIHq">
+      </div>
+      <p class="panel-hint" style="margin-top:-6px;">
+        <b>Como configurar (só uma vez):</b><br>
+        1. Crie uma conta grátis em <b>jsonbin.io</b>.<br>
+        2. Vá em "API Keys" e copie sua <b>X-MASTER-KEY</b>.<br>
+        3. Crie um novo Bin (Create Bin), marque como <b>Public</b>, e cole o conteúdo do
+        seu <code>precos.json</code> atual dentro dele.<br>
+        4. Copie o <b>Bin ID</b> que aparece na URL/painel do bin.<br>
+        5. Cole os dois campos acima e clique em "Salvar configuração".
+      </p>
+      <button class="btn-add-linha" id="btnSalvarConfig" type="button">Salvar configuração</button>
+    </section>
+
+    <button class="btn-baixar" id="btnSalvarNuvem" type="button" style="background: var(--teal);">☁ Salvar preços agora (atualiza pra todo mundo)</button>
+    <div id="statusNuvem" style="text-align:center; font-size:12.5px; margin-top:10px; color: var(--ink-soft);"></div>
+
+    <button class="btn-baixar" id="btnBaixar" type="button" style="background: transparent; border: 1.5px solid var(--line); color: var(--ink-soft);">⬇ Ou baixar precos.json manualmente</button>
+  </div>
+
+  <footer>Pai do Cell — administração interna</footer>
+</div>
+
+<script>
+  // Senha simples do lado do cliente — só um filtro contra acesso casual dos
+  // funcionários, não é segurança real (qualquer um com acesso ao código vê a senha).
+  const SENHA_ADMIN = "19721412";
+
+  document.getElementById('btnEntrar').addEventListener('click', tentarEntrar);
+  document.getElementById('inpSenha').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tentarEntrar();
+  });
+
+  function tentarEntrar(){
+    const senha = document.getElementById('inpSenha').value;
+    if (senha === SENHA_ADMIN){
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('painelAdmin').style.display = 'block';
+      carregarPrecos();
+    } else {
+      document.getElementById('msgErro').style.display = 'block';
+    }
+  }
+
+  let precos = { modelosUsados: [], modelosNovos: [] };
+
+  // ---------- configuração do armazenamento em nuvem (salva só neste navegador) ----------
+  const CHAVE_CONFIG = 'paidocell_admin_nuvem';
+
+  function carregarConfig(){
+    try{
+      const dados = localStorage.getItem(CHAVE_CONFIG);
+      if (dados){
+        const cfg = JSON.parse(dados);
+        document.getElementById('inpBinId').value = cfg.binId || '';
+        document.getElementById('inpMasterKey').value = cfg.masterKey || '';
+      }
+    }catch(e){}
+  }
+  function salvarConfig(){
+    const cfg = {
+      binId: document.getElementById('inpBinId').value.trim(),
+      masterKey: document.getElementById('inpMasterKey').value.trim(),
+    };
+    localStorage.setItem(CHAVE_CONFIG, JSON.stringify(cfg));
+    return cfg;
+  }
+  document.getElementById('btnSalvarConfig').addEventListener('click', () => {
+    salvarConfig();
+    alert('Configuração salva neste navegador.');
+  });
+
+  async function salvarNaNuvem(){
+    const cfg = salvarConfig();
+    const status = document.getElementById('statusNuvem');
+
+    if (!cfg.binId || !cfg.masterKey){
+      status.style.color = '#E5484D';
+      status.textContent = 'Preencha o Bin ID e a chave mestra antes de salvar.';
+      return;
+    }
+
+    status.style.color = 'var(--ink-soft)';
+    status.textContent = 'Salvando...';
+
+    try{
+      const resp = await fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': cfg.masterKey
+        },
+        body: JSON.stringify(precos)
+      });
+
+      if (!resp.ok){
+        throw new Error(resp.status === 401
+          ? 'Chave mestra incorreta.'
+          : resp.status === 404
+            ? 'Bin ID não encontrado. Confira o valor.'
+            : `Erro ao salvar (${resp.status}).`);
+      }
+
+      status.style.color = '#4FE38B';
+      status.textContent = '✓ Salvo! Já está valendo pra todo mundo, na hora.';
+    } catch (e){
+      status.style.color = '#E5484D';
+      status.textContent = '✕ ' + e.message;
+    }
+  }
+  document.getElementById('btnSalvarNuvem').addEventListener('click', salvarNaNuvem);
+
+  function carregarPrecos(){
+    carregarConfig();
+    const cfg = { binId: document.getElementById('inpBinId').value.trim() };
+
+    if (cfg.binId){
+      fetch(`https://api.jsonbin.io/v3/b/${cfg.binId}/latest`)
+        .then(r => r.json())
+        .then(resp => {
+          precos = resp.record;
+          renderLista('listaUsados', precos.modelosUsados, 'precoBase');
+          renderLista('listaNovos', precos.modelosNovos, 'preco');
+        })
+        .catch(() => {
+          alert('Não consegui carregar os preços do jsonbin.io. Confira o Bin ID, ou carregue o precos.json local abaixo.');
+          carregarPrecosLocal();
+        });
+    } else {
+      carregarPrecosLocal();
+    }
+  }
+
+  function carregarPrecosLocal(){
+    fetch('precos.json')
+      .then(r => r.json())
+      .then(dados => {
+        precos = dados;
+        renderLista('listaUsados', precos.modelosUsados, 'precoBase');
+        renderLista('listaNovos', precos.modelosNovos, 'preco');
+      })
+      .catch(() => {
+        alert('Não consegui carregar o precos.json. Verifique se ele está na mesma pasta desta página.');
+      });
+  }
+
+  function renderLista(containerId, lista, campoValor){
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    lista.forEach((item, i) => {
+      const linha = document.createElement('div');
+      linha.className = 'linha-preco';
+      linha.innerHTML = `
+        <input type="text" value="${item.nome}" data-campo="nome" data-idx="${i}">
+        <input type="number" value="${item[campoValor]}" step="0.01" min="0" data-campo="${campoValor}" data-idx="${i}">
+        <button class="lp-remove" data-idx="${i}">✕</button>
+      `;
+      container.appendChild(linha);
+    });
+
+    container.querySelectorAll('input').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const idx = parseInt(inp.dataset.idx, 10);
+        const campo = inp.dataset.campo;
+        lista[idx][campo] = campo === 'nome' ? inp.value : (parseFloat(inp.value) || 0);
+      });
+    });
+    container.querySelectorAll('.lp-remove').forEach(btn => {
+      btn.addEventListener('click', () => {
+        lista.splice(parseInt(btn.dataset.idx, 10), 1);
+        renderLista(containerId, lista, campoValor);
+      });
+    });
+  }
+
+  document.getElementById('btnAddUsado').addEventListener('click', () => {
+    precos.modelosUsados.push({ nome: 'Novo modelo', precoBase: 0 });
+    renderLista('listaUsados', precos.modelosUsados, 'precoBase');
+  });
+  document.getElementById('btnAddNovo').addEventListener('click', () => {
+    precos.modelosNovos.push({ nome: 'Novo modelo', preco: 0 });
+    renderLista('listaNovos', precos.modelosNovos, 'preco');
+  });
+
+  document.getElementById('btnBaixar').addEventListener('click', () => {
+    const conteudo = JSON.stringify(precos, null, 2);
+    const blob = new Blob([conteudo], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'precos.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+</script>
+
+
+</body></html>
