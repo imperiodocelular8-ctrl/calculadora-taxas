@@ -87,6 +87,23 @@
   }
   .aviso b{ color: #fff; }
 
+  .gate{
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    padding: 26px; box-shadow: var(--shadow); text-align:center; margin-bottom: 20px;
+  }
+  .gate p{ color: var(--ink-soft); font-size: 13.5px; margin: 6px 0 16px; }
+  .gate input{
+    width: 100%; max-width: 300px; padding: 12px 14px; font-size: 14.5px; text-align:center;
+    border: 1.5px solid var(--line); border-radius: 10px; background: #0E1310; color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .gate input:focus{ outline:none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(25,169,75,0.18); }
+  .gate button{
+    padding: 12px 22px; border-radius: 10px; border: none; background: var(--teal);
+    color: #06170D; font-weight: 700; font-size: 14px; cursor: pointer;
+  }
+  .gate button:hover{ filter: brightness(1.08); }
+
   .toggle-lojas{
     display:flex; gap: 8px; flex-wrap: wrap;
   }
@@ -272,6 +289,22 @@
     computadores/celulares da loja veem os mesmos dados na hora.
   </div>
 
+  <div class="gate" id="gate">
+    <p>Entre com seu usuário (o mesmo de Gerar Garantia) para abrir o caixa.</p>
+    <input type="text" id="loginUsuario" placeholder="Usuário">
+    <input type="password" id="loginSenha" placeholder="Senha">
+    <br>
+    <button id="btnLogin" type="button">Entrar</button>
+    <p style="font-size:12.5px; color:var(--ink-soft); margin-top:14px;">Ainda não tem conta? <a href="garantias.html" style="color:var(--teal); font-weight:600; text-decoration:none;">Crie na aba de gerar garantia</a></p>
+    <div class="erro" id="msgErroLogin" style="color:#E5484D; font-size:12.5px; margin-top:6px;"></div>
+  </div>
+
+  <div id="conteudoPrincipal" style="display:none;">
+  <div class="aviso" style="display:flex; justify-content:space-between; align-items:center;">
+    <span>Caixa aberto por <b id="nomeFuncionarioLogado">—</b></span>
+    <a href="#" id="linkSair" style="color: var(--ink-soft); font-size:12px; text-decoration:underline;">sair</a>
+  </div>
+
   <section class="panel">
     <h2><span class="num">·</span> Loja</h2>
     <div class="toggle-lojas" id="toggleLojas">
@@ -367,6 +400,7 @@
   </section>
 
   <footer>Pai do Cell — controle de caixa interno</footer>
+  </div>
 </div>
 
 <script>
@@ -375,9 +409,68 @@
   const BIN_ID_CAIXA = "6a60bed1f5f4af5e29b0dc00";
   const ACCESS_KEY_CAIXA = "$2a$10$dtGPB41p6MOUyK70Pifjd.FGgQ7Umoh/AAsxu5Y5gv0Elw8HA5XdS";
 
+  // Mesmo Bin ID de garantias.html — usado só pra checar o login do funcionário
+  // (não precisa de chave, a leitura da lista de funcionários é pública).
+  const BIN_ID_GARANTIAS = "6a60c41ef5f4af5e29b0f2ce";
+  const CHAVE_SESSAO = 'paidocell_funcionario_logado';
+
   const LOJAS = ["santa-teresa", "santa-maria", "aracruz"];
   const NOMES_LOJA = { "santa-teresa": "Santa Teresa", "santa-maria": "Santa Maria", "aracruz": "Aracruz" };
   const CHAVE_LOJA_SELECIONADA = 'paidocell_loja_selecionada';
+
+  let funcionarioLogado = null;
+
+  async function hashSenha(senha){
+    const enc = new TextEncoder();
+    const dados = enc.encode('paidocell_' + senha);
+    const buffer = await crypto.subtle.digest('SHA-256', dados);
+    return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  function mostrarConteudo(){
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('conteudoPrincipal').style.display = 'block';
+    document.getElementById('nomeFuncionarioLogado').textContent = funcionarioLogado.nome;
+    if (funcionarioLogado.loja && LOJAS.includes(funcionarioLogado.loja)){
+      lojaSelecionada = funcionarioLogado.loja;
+      localStorage.setItem(CHAVE_LOJA_SELECIONADA, lojaSelecionada);
+    }
+    carregarDaNuvem();
+  }
+
+  document.getElementById('btnLogin').addEventListener('click', async () => {
+    const usuario = document.getElementById('loginUsuario').value.trim().toLowerCase();
+    const senha = document.getElementById('loginSenha').value;
+    const erro = document.getElementById('msgErroLogin');
+    erro.textContent = '';
+
+    if (!usuario || !senha){
+      erro.textContent = 'Preencha usuário e senha.';
+      return;
+    }
+    try{
+      const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID_GARANTIAS}/latest`);
+      const json = await resp.json();
+      const funcionarios = (json.record && json.record.funcionarios) || [];
+      const senhaHash = await hashSenha(senha);
+      const encontrado = funcionarios.find(f => f.usuario === usuario && f.senhaHash === senhaHash);
+      if (!encontrado){
+        erro.textContent = 'Usuário ou senha incorretos.';
+        return;
+      }
+      funcionarioLogado = { nome: encontrado.nome, usuario: encontrado.usuario, loja: encontrado.loja };
+      localStorage.setItem(CHAVE_SESSAO, JSON.stringify(funcionarioLogado));
+      mostrarConteudo();
+    } catch(e){
+      erro.textContent = 'Não consegui verificar seu login. Confira sua internet.';
+    }
+  });
+
+  document.getElementById('linkSair').addEventListener('click', (e) => {
+    e.preventDefault();
+    localStorage.removeItem(CHAVE_SESSAO);
+    location.reload();
+  });
 
   function brl(n){
     return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -503,7 +596,7 @@
         div.innerHTML = `
           <div>
             <div class="lc-desc">${l.desc}</div>
-            <div class="lc-meta">${l.forma}</div>
+            <div class="lc-meta">${l.forma}${l.funcionario ? ' · ' + l.funcionario : ''}</div>
           </div>
           <div style="display:flex; align-items:center; gap:10px;">
             <div class="lc-valor">${l.tipo === 'entrada' ? '+' : '−'} ${brl(l.valor)}</div>
@@ -522,7 +615,7 @@
     }
 
     const { entradas, saidas, saldo } = totais();
-    document.getElementById('laudoData').textContent = NOMES_LOJA[lojaSelecionada] + ' · ' + dataFormatada(atual.data);
+    document.getElementById('laudoData').textContent = NOMES_LOJA[lojaSelecionada] + ' · ' + dataFormatada(atual.data) + (atual.abertoPor ? ' · aberto por ' + atual.abertoPor : '');
     document.getElementById('lvAbertura').textContent = brl(atual.abertura);
     document.getElementById('lvEntradas').textContent = brl(entradas);
     document.getElementById('lvSaidas').textContent = brl(saidas);
@@ -558,7 +651,10 @@
     if (dataEscolhida === atual.data && atual.lancamentos.length > 0){
       atual.abertura = aberturaEscolhida;
     } else {
-      dadosCaixa[lojaSelecionada].atual = { data: dataEscolhida, abertura: aberturaEscolhida, lancamentos: [] };
+      dadosCaixa[lojaSelecionada].atual = {
+        data: dataEscolhida, abertura: aberturaEscolhida, lancamentos: [],
+        abertoPor: funcionarioLogado.nome
+      };
     }
     renderTudo();
     salvarNaNuvem();
@@ -571,7 +667,7 @@
       alert('Preencha a descrição e um valor válido.');
       return;
     }
-    caixaAtual().lancamentos.push({ tipo, desc, valor, forma: selForma.value });
+    caixaAtual().lancamentos.push({ tipo, desc, valor, forma: selForma.value, funcionario: funcionarioLogado.nome });
     inpDesc.value = '';
     inpValor.value = '';
     renderTudo();
@@ -628,7 +724,12 @@
     });
   }
 
-  carregarDaNuvem();
+  // restaura sessão já salva neste aparelho (feita na aba de gerar garantia, por exemplo)
+  const sessaoSalva = localStorage.getItem(CHAVE_SESSAO);
+  if (sessaoSalva){
+    funcionarioLogado = JSON.parse(sessaoSalva);
+    mostrarConteudo();
+  }
 </script>
 </body>
 </html>
