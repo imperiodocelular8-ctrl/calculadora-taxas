@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0B0F0D">
+<title>Pai do Cell · Controle de Caixa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B0F0D;
+    --panel: #141917;
+    --ink: #EAF3ED;
+    --ink-soft: #8FA69A;
+    --line: #24312B;
+    --teal: #19A94B;
+    --teal-deep: #0F6D30;
+    --amber: #2ECC63;
+    --amber-soft: #163823;
+    --red: #E5484D;
+    --red-soft: #331416;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 28px -14px rgba(0,0,0,0.7);
+  }
+  *{ box-sizing: border-box; }
+  html, body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(234,243,237,0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 40px 16px 90px;
+  }
+  .wrap{ max-width: 880px; margin: 0 auto; }
+
+  .voltar-link{
+    display:inline-block;
+    font-family:'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-decoration: none;
+    margin-bottom: 10px;
+  }
+  .voltar-link:hover{ color: var(--teal); }
+  .logo{ display:flex; align-items:center; gap: 10px; margin-bottom: 18px; }
+  .logo-mark{
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(155deg, #1EBD57, #0F6D30);
+    display:flex; align-items:center; justify-content:center; flex-shrink: 0;
+    box-shadow: 0 4px 14px -4px rgba(25,169,75,0.55);
+  }
+  .logo-mark svg{ width: 18px; height: 18px; }
+  .logo-text{
+    font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 17px;
+    letter-spacing: -0.01em; color: var(--ink); line-height: 1.1;
+  }
+  .logo-text span{
+    display:block; font-family:'IBM Plex Mono', monospace; font-weight: 600;
+    font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--teal); margin-top: 2px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #6FE39B; background: #10281A; display:inline-block;
+    padding: 4px 10px; border-radius: 100px; margin-bottom: 10px; font-weight: 600;
+  }
+  h1{
+    font-family:'Space Grotesk', sans-serif; font-weight: 700;
+    font-size: clamp(24px, 4vw, 32px); margin: 0; letter-spacing: -0.01em;
+  }
+  .subtitle{ color: var(--ink-soft); font-size: 14px; margin-top: 6px; max-width: 54ch; }
+  header{ margin-bottom: 20px; }
+
+  .aviso{
+    background: var(--amber-soft);
+    border: 1px solid rgba(46,204,99,0.35);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 12.5px;
+    color: #B9E8CC;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  .aviso b{ color: #fff; }
+
+  .toggle-lojas{
+    display:flex; gap: 8px; flex-wrap: wrap;
+  }
+  .loja-btn{
+    flex: 1 1 140px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1.5px solid var(--line);
+    background: #0E1310;
+    color: var(--ink-soft);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 13.5px;
+    cursor: pointer;
+  }
+  .loja-btn.selecionada{
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #06170D;
+  }
+
+  .panel{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+  .panel h2{
+    font-family:'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600;
+    margin: 0 0 4px; display:flex; align-items:center; gap: 8px;
+  }
+  .panel h2 .num{
+    font-family:'IBM Plex Mono', monospace; font-size: 12px; color: #06170D;
+    background: var(--teal); width: 20px; height: 20px; border-radius: 6px;
+    display:inline-flex; align-items:center; justify-content:center;
+  }
+  .panel-hint{ font-size: 12px; color: var(--ink-soft); margin: 0 0 16px; }
+
+  .field{ margin-bottom: 14px; }
+  .field:last-child{ margin-bottom: 0; }
+  .field label{
+    display:block; font-size: 12px; font-weight: 600; color: var(--ink-soft);
+    margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  select, input[type="text"], input[type="number"], input[type="date"]{
+    width: 100%; padding: 12px 14px; font-family: 'Inter', sans-serif; font-size: 14.5px;
+    font-weight: 500; border: 1.5px solid var(--line); border-radius: 10px;
+    background: #0E1310; color: var(--ink); appearance: none; -webkit-appearance: none;
+  }
+  select{
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%238FA69A'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center;
+    background-size: 18px; padding-right: 38px;
+  }
+  select:focus, input:focus{
+    outline:none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(25,169,75,0.18);
+  }
+
+  .row-3{ display:grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 12px; align-items:end; }
+  .row-3 .field{ margin-bottom: 0; }
+
+  .btn{
+    padding: 12px 18px; border-radius: 10px; border: none; font-family: 'Inter', sans-serif;
+    font-weight: 700; font-size: 13.5px; cursor: pointer;
+  }
+  .btn-add-entrada{ background: var(--teal); color: #06170D; width: 100%; }
+  .btn-add-entrada:hover{ filter: brightness(1.08); }
+  .btn-add-saida{ background: var(--red); color: #200608; width: 100%; }
+  .btn-add-saida:hover{ filter: brightness(1.08); }
+
+  .lista-lancamentos{ margin-top: 16px; display:flex; flex-direction:column; gap: 8px; }
+  .lancamento{
+    display:flex; align-items:center; justify-content:space-between; gap: 10px;
+    background: #0E1310; border: 1px solid var(--line); border-radius: 10px;
+    padding: 10px 14px;
+  }
+  .lancamento.entrada{ border-left: 3px solid var(--teal); }
+  .lancamento.saida{ border-left: 3px solid var(--red); }
+  .lc-desc{ font-size: 13.5px; font-weight: 600; }
+  .lc-meta{ font-size: 11.5px; color: var(--ink-soft); font-family:'IBM Plex Mono', monospace; }
+  .lc-valor{ font-family:'IBM Plex Mono', monospace; font-weight: 700; font-size: 14px; white-space: nowrap; }
+  .lancamento.entrada .lc-valor{ color: #4FE38B; }
+  .lancamento.saida .lc-valor{ color: #F5A97F; }
+  .lc-remove{
+    width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line);
+    background: transparent; color: var(--ink-soft); font-size: 12px; cursor: pointer;
+    flex-shrink: 0;
+  }
+  .lc-remove:hover{ border-color: var(--red); color: var(--red); }
+  .vazio{ font-size: 12.5px; color: var(--ink-soft); text-align:center; padding: 14px 0; }
+
+  /* ---------- resumo / laudo ---------- */
+  .laudo{
+    background: #0D1F13; border: 1px solid #1E3A28; border-radius: 16px;
+    padding: 22px 24px; box-shadow: 0 16px 40px -18px rgba(0,0,0,0.7);
+  }
+  .laudo-label{
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #57C784; margin-bottom: 4px;
+  }
+  .laudo-data{
+    font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 16px;
+    color: #fff; margin-bottom: 16px;
+  }
+  .laudo-row{
+    display:flex; justify-content: space-between; align-items: baseline; padding: 7px 0;
+    border-top: 1px dashed rgba(87,199,132,0.2); font-family:'IBM Plex Mono', monospace;
+    font-size: 13px; color: #A9D9BC;
+  }
+  .laudo-row.total{
+    border-top: 1px solid rgba(87,199,132,0.4); margin-top: 4px; padding-top: 12px; font-size: 14px;
+  }
+  .laudo-row.total .lv{ font-size: 24px; font-weight: 700; color: #4FE38B; }
+  .lv{ font-weight: 600; }
+
+  .btn-fechar{
+    width: 100%; margin-top: 18px; background: var(--teal); color: #06170D;
+    border: none; border-radius: 10px; padding: 14px 16px; font-family: 'Inter', sans-serif;
+    font-weight: 700; font-size: 14.5px; cursor: pointer;
+  }
+  .btn-fechar:hover{ filter: brightness(1.08); }
+  .btn-fechar:active{ transform: scale(0.99); }
+
+  .whatsapp-btn{
+    width: 100%; margin-top: 10px; display:flex; align-items:center; justify-content:center;
+    gap: 9px; background: #25D366; color: #062B17; border: none; border-radius: 10px;
+    padding: 13px 16px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 14px;
+    cursor: pointer; transition: filter .15s, transform .1s;
+  }
+  .whatsapp-btn:hover{ filter: brightness(1.08); }
+  .whatsapp-btn:active{ transform: scale(0.98); }
+  .whatsapp-btn svg{ width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* ---------- histórico ---------- */
+  .historico-item{
+    background: #0E1310; border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 10px; cursor: pointer;
+  }
+  .historico-topo{ display:flex; justify-content:space-between; align-items:center; }
+  .historico-data{ font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; }
+  .historico-saldo{ font-family:'IBM Plex Mono', monospace; font-weight: 700; color: #4FE38B; }
+  .historico-detalhe{ display:none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); }
+  .historico-detalhe.aberto{ display:block; }
+  .historico-detalhe .laudo-row{ border-top: 1px dashed var(--line); color: var(--ink-soft); }
+
+  footer{
+    text-align:center; font-size: 12px; color: var(--ink-soft); margin-top: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  @media (max-width: 640px){
+    body{ padding: 20px 12px 90px; }
+    .panel{ padding: 16px; }
+    .row-3{ grid-template-columns: 1fr; gap: 10px; }
+    h1{ font-size: 23px; }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <a href="index.html" class="voltar-link">← Voltar ao painel</a>
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="2" width="12" height="20" rx="2.5" stroke="#06170D" stroke-width="1.8"/>
+          <line x1="9" y1="18.2" x2="15" y2="18.2" stroke="#06170D" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">Pai do Cell<span>Assistência &amp; Acessórios</span></div>
+    </div>
+    <span class="eyebrow">Uso interno · Caixa</span>
+    <h1>Controle de Caixa</h1>
+    <p class="subtitle">Lance as entradas e saídas do dia e feche o caixa. O histórico fica salvo automaticamente.</p>
+  </header>
+
+  <div class="aviso" id="avisoTopo">
+    <b>Salvamento automático:</b> os lançamentos são salvos na nuvem a cada ação — todos os
+    computadores/celulares da loja veem os mesmos dados na hora.
+  </div>
+
+  <section class="panel">
+    <h2><span class="num">·</span> Loja</h2>
+    <div class="toggle-lojas" id="toggleLojas">
+      <button type="button" data-loja="santa-teresa" class="loja-btn">Santa Teresa</button>
+      <button type="button" data-loja="santa-maria" class="loja-btn">Santa Maria</button>
+      <button type="button" data-loja="aracruz" class="loja-btn">Aracruz</button>
+    </div>
+    <div id="statusNuvemCaixa" style="font-size:12px; color: var(--ink-soft); margin-top:10px;"></div>
+  </section>
+
+  <section class="panel">
+    <h2><span class="num">1</span> Abertura do dia</h2>
+    <div class="row-3">
+      <div class="field">
+        <label for="inpData">Data</label>
+        <input type="date" id="inpData">
+      </div>
+      <div class="field">
+        <label for="inpAbertura">Valor de abertura (R$)</label>
+        <input type="number" id="inpAbertura" step="0.01" min="0" value="0">
+      </div>
+      <div class="field">
+        <button class="btn btn-add-entrada" id="btnNovoDia" type="button">Iniciar / carregar dia</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2><span class="num">2</span> Lançar movimentação</h2>
+    <p class="panel-hint">Registre cada venda, retirada ou despesa do caixa.</p>
+
+    <div class="row-3">
+      <div class="field">
+        <label for="inpDesc">Descrição</label>
+        <input type="text" id="inpDesc" placeholder="Ex: Venda capinha, Sangria, Troco">
+      </div>
+      <div class="field">
+        <label for="inpValor">Valor (R$)</label>
+        <input type="number" id="inpValor" step="0.01" min="0" placeholder="0,00">
+      </div>
+      <div class="field">
+        <label for="selForma">Forma</label>
+        <select id="selForma">
+          <option>Dinheiro</option>
+          <option>Cartão débito</option>
+          <option>Cartão crédito</option>
+          <option>Pix</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row-3" style="margin-top: 12px;">
+      <button class="btn btn-add-entrada" id="btnEntrada" type="button">+ Entrada</button>
+      <button class="btn btn-add-saida" id="btnSaida" type="button">− Saída</button>
+      <div></div>
+    </div>
+
+    <div class="lista-lancamentos" id="listaLancamentos"></div>
+  </section>
+
+  <section class="panel laudo">
+    <div class="laudo-label">Resumo do caixa</div>
+    <div class="laudo-data" id="laudoData">—</div>
+
+    <div class="laudo-row">
+      <span>Valor de abertura</span>
+      <span class="lv" id="lvAbertura">R$ 0,00</span>
+    </div>
+    <div class="laudo-row">
+      <span>Total de entradas</span>
+      <span class="lv" id="lvEntradas">R$ 0,00</span>
+    </div>
+    <div class="laudo-row">
+      <span>Total de saídas</span>
+      <span class="lv" id="lvSaidas">R$ 0,00</span>
+    </div>
+    <div class="laudo-row total">
+      <span>Saldo em caixa</span>
+      <span class="lv" id="lvSaldo">R$ 0,00</span>
+    </div>
+
+    <button class="btn-fechar" id="btnFechar" type="button">Fechar caixa do dia</button>
+    <button class="whatsapp-btn" id="btnWhatsapp" type="button">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6l.4-.5c.1-.1.2-.3.2-.4.1-.1 0-.3 0-.4-.1-.1-.6-1.4-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.3-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.6.2 1.1.1 1.5.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1-.1-.1-.2-.1-.4-.2z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.6 1.4 5.1L2 22l5-1.4c1.4.8 3.1 1.2 4.9 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.2-.4-4.5-1.2l-.3-.2-3 .8.8-2.9-.2-.3C4 15 3.5 13.5 3.5 12c0-4.7 3.8-8.5 8.5-8.5s8.5 3.8 8.5 8.5-3.8 8.5-8.5 8.5z"/></svg>
+      Compartilhar resumo no WhatsApp
+    </button>
+  </section>
+
+  <section class="panel" id="painelHistorico">
+    <h2><span class="num">3</span> Histórico de dias fechados</h2>
+    <p class="panel-hint">Toque num dia para ver os detalhes.</p>
+    <div id="listaHistorico"></div>
+  </section>
+
+  <footer>Pai do Cell — controle de caixa interno</footer>
+</div>
+
+<script>
+  // Cole aqui o Bin ID e a Chave de acesso (Access Key com permissão de Update)
+  // gerados no jsonbin.io para o caixa. Veja instruções com o administrador.
+  const BIN_ID_CAIXA = "6a60bed1f5f4af5e29b0dc00";
+  const ACCESS_KEY_CAIXA = "$2a$10$dtGPB41p6MOUyK70Pifjd.FGgQ7Umoh/AAsxu5Y5gv0Elw8HA5XdS";
+
+  const LOJAS = ["santa-teresa", "santa-maria", "aracruz"];
+  const NOMES_LOJA = { "santa-teresa": "Santa Teresa", "santa-maria": "Santa Maria", "aracruz": "Aracruz" };
+  const CHAVE_LOJA_SELECIONADA = 'paidocell_loja_selecionada';
+
+  function brl(n){
+    return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+  function hojeISO(){
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  function dataFormatada(iso){
+    const [ano, mes, dia] = iso.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
+  function novoDiaVazio(){
+    return { data: hojeISO(), abertura: 0, lancamentos: [] };
+  }
+
+  // dadosCaixa guarda o estado das 3 lojas: { "santa-teresa": {atual, historico}, ... }
+  let dadosCaixa = {};
+  LOJAS.forEach(l => { dadosCaixa[l] = { atual: novoDiaVazio(), historico: [] }; });
+
+  let lojaSelecionada = localStorage.getItem(CHAVE_LOJA_SELECIONADA) || LOJAS[0];
+  let carregado = false;
+
+  const inpData = document.getElementById('inpData');
+  const inpAbertura = document.getElementById('inpAbertura');
+  const inpDesc = document.getElementById('inpDesc');
+  const inpValor = document.getElementById('inpValor');
+  const selForma = document.getElementById('selForma');
+  const listaLancamentos = document.getElementById('listaLancamentos');
+  const statusNuvem = document.getElementById('statusNuvemCaixa');
+
+  function caixaAtual(){ return dadosCaixa[lojaSelecionada].atual; }
+  function historicoAtual(){ return dadosCaixa[lojaSelecionada].historico; }
+
+  function marcarStatus(texto, cor){
+    statusNuvem.textContent = texto;
+    statusNuvem.style.color = cor || 'var(--ink-soft)';
+  }
+
+  async function carregarDaNuvem(){
+    if (!BIN_ID_CAIXA){
+      marcarStatus('⚠ Nuvem não configurada — peça pro administrador concluir a configuração.', '#F5A97F');
+      carregado = true;
+      renderTudo();
+      return;
+    }
+    marcarStatus('Carregando dados da nuvem...');
+    try{
+      const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID_CAIXA}/latest`);
+      if (!resp.ok) throw new Error('Falha ao carregar');
+      const json = await resp.json();
+      LOJAS.forEach(l => {
+        if (json.record && json.record[l]){
+          dadosCaixa[l] = json.record[l];
+          if (!dadosCaixa[l].atual || dadosCaixa[l].atual.data !== hojeISO()){
+            // novo dia: mantém saldo anterior como abertura sugerida se existir
+            const saldoAnterior = dadosCaixa[l].atual ? totaisDe(dadosCaixa[l].atual).saldo : 0;
+            dadosCaixa[l].atual = novoDiaVazio();
+            if (dadosCaixa[l].historico && dadosCaixa[l].historico.length === 0 && saldoAnterior){
+              dadosCaixa[l].atual.abertura = saldoAnterior;
+            }
+          }
+        }
+      });
+      marcarStatus('✓ Sincronizado com a nuvem', '#4FE38B');
+    } catch(e){
+      marcarStatus('✕ Não consegui carregar da nuvem. Verifique sua internet.', '#E5484D');
+    }
+    carregado = true;
+    renderTudo();
+  }
+
+  async function salvarNaNuvem(){
+    if (!BIN_ID_CAIXA || !ACCESS_KEY_CAIXA) return;
+    marcarStatus('Salvando...');
+    try{
+      const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID_CAIXA}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Key': ACCESS_KEY_CAIXA
+        },
+        body: JSON.stringify(dadosCaixa)
+      });
+      if (!resp.ok) throw new Error('Falha ao salvar');
+      marcarStatus('✓ Salvo na nuvem', '#4FE38B');
+    } catch(e){
+      marcarStatus('✕ Não salvou na nuvem — confira sua internet e tente de novo.', '#E5484D');
+    }
+  }
+
+  function totaisDe(caixa){
+    let entradas = 0, saidas = 0;
+    caixa.lancamentos.forEach(l => {
+      if (l.tipo === 'entrada') entradas += l.valor; else saidas += l.valor;
+    });
+    const saldo = caixa.abertura + entradas - saidas;
+    return { entradas, saidas, saldo };
+  }
+  function totais(){ return totaisDe(caixaAtual()); }
+
+  function renderLojas(){
+    document.querySelectorAll('.loja-btn').forEach(btn => {
+      btn.classList.toggle('selecionada', btn.dataset.loja === lojaSelecionada);
+    });
+  }
+
+  function renderTudo(){
+    if (!carregado) return;
+    renderLojas();
+    const atual = caixaAtual();
+    inpData.value = atual.data;
+    inpAbertura.value = atual.abertura;
+
+    listaLancamentos.innerHTML = '';
+    if (atual.lancamentos.length === 0){
+      listaLancamentos.innerHTML = '<div class="vazio">Nenhuma movimentação lançada ainda hoje.</div>';
+    } else {
+      atual.lancamentos.slice().reverse().forEach((l) => {
+        const idxReal = atual.lancamentos.indexOf(l);
+        const div = document.createElement('div');
+        div.className = 'lancamento ' + l.tipo;
+        div.innerHTML = `
+          <div>
+            <div class="lc-desc">${l.desc}</div>
+            <div class="lc-meta">${l.forma}</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div class="lc-valor">${l.tipo === 'entrada' ? '+' : '−'} ${brl(l.valor)}</div>
+            <button class="lc-remove" data-idx="${idxReal}">✕</button>
+          </div>
+        `;
+        listaLancamentos.appendChild(div);
+      });
+      listaLancamentos.querySelectorAll('[data-idx]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          atual.lancamentos.splice(parseInt(btn.dataset.idx, 10), 1);
+          renderTudo();
+          salvarNaNuvem();
+        });
+      });
+    }
+
+    const { entradas, saidas, saldo } = totais();
+    document.getElementById('laudoData').textContent = NOMES_LOJA[lojaSelecionada] + ' · ' + dataFormatada(atual.data);
+    document.getElementById('lvAbertura').textContent = brl(atual.abertura);
+    document.getElementById('lvEntradas').textContent = brl(entradas);
+    document.getElementById('lvSaidas').textContent = brl(saidas);
+    document.getElementById('lvSaldo').textContent = brl(saldo);
+
+    let linhas = [
+      `*Pai do Cell — Fechamento de caixa*`,
+      `Loja: ${NOMES_LOJA[lojaSelecionada]}`,
+      `Data: ${dataFormatada(atual.data)}`,
+      `Abertura: ${brl(atual.abertura)}`,
+      `Entradas: ${brl(entradas)}`,
+      `Saídas: ${brl(saidas)}`,
+      `*Saldo em caixa: ${brl(saldo)}*`,
+    ];
+    const mensagem = encodeURIComponent(linhas.join('\n'));
+    document.getElementById('btnWhatsapp').dataset.link = `https://wa.me/?text=${mensagem}`;
+
+    renderHistorico();
+  }
+
+  document.getElementById('toggleLojas').addEventListener('click', (e) => {
+    const btn = e.target.closest('.loja-btn');
+    if (!btn) return;
+    lojaSelecionada = btn.dataset.loja;
+    localStorage.setItem(CHAVE_LOJA_SELECIONADA, lojaSelecionada);
+    renderTudo();
+  });
+
+  document.getElementById('btnNovoDia').addEventListener('click', () => {
+    const atual = caixaAtual();
+    const dataEscolhida = inpData.value || hojeISO();
+    const aberturaEscolhida = parseFloat(inpAbertura.value) || 0;
+    if (dataEscolhida === atual.data && atual.lancamentos.length > 0){
+      atual.abertura = aberturaEscolhida;
+    } else {
+      dadosCaixa[lojaSelecionada].atual = { data: dataEscolhida, abertura: aberturaEscolhida, lancamentos: [] };
+    }
+    renderTudo();
+    salvarNaNuvem();
+  });
+
+  function adicionarLancamento(tipo){
+    const desc = inpDesc.value.trim();
+    const valor = parseFloat(inpValor.value);
+    if (!desc || !valor || valor <= 0){
+      alert('Preencha a descrição e um valor válido.');
+      return;
+    }
+    caixaAtual().lancamentos.push({ tipo, desc, valor, forma: selForma.value });
+    inpDesc.value = '';
+    inpValor.value = '';
+    renderTudo();
+    salvarNaNuvem();
+  }
+  document.getElementById('btnEntrada').addEventListener('click', () => adicionarLancamento('entrada'));
+  document.getElementById('btnSaida').addEventListener('click', () => adicionarLancamento('saida'));
+
+  document.getElementById('btnFechar').addEventListener('click', () => {
+    const atual = caixaAtual();
+    if (!confirm(`Fechar o caixa de ${NOMES_LOJA[lojaSelecionada]} do dia ${dataFormatada(atual.data)}? Isso vai salvar no histórico e começar um novo dia.`)) return;
+    const { entradas, saidas, saldo } = totais();
+    dadosCaixa[lojaSelecionada].historico.unshift({
+      data: atual.data,
+      abertura: atual.abertura,
+      entradas, saidas, saldo,
+      lancamentos: atual.lancamentos
+    });
+    dadosCaixa[lojaSelecionada].atual = { data: hojeISO(), abertura: saldo, lancamentos: [] };
+    renderTudo();
+    salvarNaNuvem();
+  });
+
+  document.getElementById('btnWhatsapp').addEventListener('click', function(){
+    window.open(this.dataset.link, '_blank');
+  });
+
+  function renderHistorico(){
+    const historico = historicoAtual();
+    const lista = document.getElementById('listaHistorico');
+    lista.innerHTML = '';
+    if (historico.length === 0){
+      lista.innerHTML = '<div class="vazio">Nenhum dia fechado ainda.</div>';
+      return;
+    }
+    historico.forEach((h, i) => {
+      const item = document.createElement('div');
+      item.className = 'historico-item';
+      item.innerHTML = `
+        <div class="historico-topo">
+          <div class="historico-data">${dataFormatada(h.data)}</div>
+          <div class="historico-saldo">${brl(h.saldo)}</div>
+        </div>
+        <div class="historico-detalhe" id="det-${i}">
+          <div class="laudo-row"><span>Abertura</span><span>${brl(h.abertura)}</span></div>
+          <div class="laudo-row"><span>Entradas</span><span>${brl(h.entradas)}</span></div>
+          <div class="laudo-row"><span>Saídas</span><span>${brl(h.saidas)}</span></div>
+        </div>
+      `;
+      item.addEventListener('click', () => {
+        document.getElementById(`det-${i}`).classList.toggle('aberto');
+      });
+      lista.appendChild(item);
+    });
+  }
+
+  carregarDaNuvem();
+</script>
+</body>
+</html>

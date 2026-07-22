@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0B0F0D">
+<title>Pai do Cell · Admin · Caixa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B0F0D; --panel: #141917; --ink: #EAF3ED; --ink-soft: #8FA69A;
+    --line: #24312B; --teal: #19A94B; --teal-deep: #0F6D30; --amber: #2ECC63;
+    --amber-soft: #163823; --red: #E5484D;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 28px -14px rgba(0,0,0,0.7);
+  }
+  *{ box-sizing: border-box; }
+  html, body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    background-image: radial-gradient(circle at 1px 1px, rgba(234,243,237,0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+    color: var(--ink); font-family: 'Inter', sans-serif; min-height: 100vh; padding: 40px 16px 90px;
+  }
+  .wrap{ max-width: 880px; margin: 0 auto; }
+  .voltar-link{ display:inline-block; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); text-decoration: none; margin-bottom: 10px; }
+  .voltar-link:hover{ color: var(--teal); }
+  .logo{ display:flex; align-items:center; gap: 10px; margin-bottom: 18px; }
+  .logo-mark{
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(155deg, #1EBD57, #0F6D30);
+    display:flex; align-items:center; justify-content:center; flex-shrink: 0;
+    box-shadow: 0 4px 14px -4px rgba(25,169,75,0.55);
+  }
+  .logo-mark svg{ width: 18px; height: 18px; }
+  .logo-text{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 17px; color: var(--ink); line-height: 1.1; }
+  .logo-text span{ display:block; font-family:'IBM Plex Mono', monospace; font-weight: 600; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); margin-top: 2px; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #F5A97F; background: #331E10; display:inline-block; padding: 4px 10px; border-radius: 100px;
+    margin-bottom: 10px; font-weight: 600;
+  }
+  h1{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(24px, 4vw, 30px); margin: 0; }
+  .subtitle{ color: var(--ink-soft); font-size: 14px; margin-top: 6px; max-width: 56ch; }
+  header{ margin-bottom: 22px; }
+
+  .gate{
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    padding: 28px; box-shadow: var(--shadow); text-align:center;
+  }
+  .gate p{ color: var(--ink-soft); font-size: 13.5px; margin: 6px 0 18px; }
+  .gate input{
+    width: 100%; max-width: 260px; padding: 12px 14px; font-size: 15px; text-align:center;
+    border: 1.5px solid var(--line); border-radius: 10px; background: #0E1310; color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .gate input:focus{ outline:none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(25,169,75,0.18); }
+  .gate button{
+    padding: 12px 22px; border-radius: 10px; border: none; background: var(--teal);
+    color: #06170D; font-weight: 700; font-size: 14px; cursor: pointer;
+  }
+  .gate button:hover{ filter: brightness(1.08); }
+  .gate .erro{ color: var(--red); font-size: 12.5px; margin-top: 10px; display:none; }
+
+  #painelAdmin{ display:none; }
+
+  .topo-acoes{ display:flex; justify-content:flex-end; margin-bottom: 14px; }
+  .btn-atualizar{
+    padding: 9px 16px; border-radius: 9px; border: 1px solid var(--line); background: #0E1310;
+    color: var(--ink-soft); font-weight: 600; font-size: 12.5px; cursor: pointer;
+  }
+  .btn-atualizar:hover{ border-color: var(--teal); color: var(--teal); }
+
+  .loja-secao{
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    box-shadow: var(--shadow); padding: 22px; margin-bottom: 18px;
+  }
+  .loja-titulo{
+    font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 17px;
+    display:flex; align-items:center; gap: 8px; margin-bottom: 14px;
+  }
+  .loja-dot{ width: 9px; height: 9px; border-radius: 50%; background: var(--teal); }
+
+  .resumo-hoje{
+    background: #0D1F13; border: 1px solid #1E3A28; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px;
+  }
+  .resumo-row{
+    display:flex; justify-content:space-between; padding: 5px 0; font-family:'IBM Plex Mono', monospace;
+    font-size: 13px; color: #A9D9BC;
+  }
+  .resumo-row.total{ border-top: 1px solid rgba(87,199,132,0.35); margin-top: 6px; padding-top: 10px; }
+  .resumo-row.total span:last-child{ font-size: 19px; font-weight: 700; color: #4FE38B; }
+
+  .hist-item{
+    background: #0E1310; border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px 14px; margin-bottom: 8px; cursor: pointer;
+  }
+  .hist-topo{ display:flex; justify-content:space-between; align-items:center; font-size: 13.5px; }
+  .hist-saldo{ font-family:'IBM Plex Mono', monospace; font-weight: 700; color: #4FE38B; }
+  .hist-detalhe{ display:none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: 12.5px; color: var(--ink-soft); }
+  .hist-detalhe.aberto{ display:block; }
+  .hist-detalhe div{ display:flex; justify-content:space-between; padding: 3px 0; }
+  .vazio{ font-size: 12.5px; color: var(--ink-soft); text-align:center; padding: 10px 0; }
+
+  footer{ text-align:center; font-size: 12px; color: var(--ink-soft); margin-top: 26px; font-family: 'IBM Plex Mono', monospace; }
+
+  @media (max-width: 640px){
+    body{ padding: 20px 12px 90px; }
+    .loja-secao{ padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <a href="index.html" class="voltar-link">← Voltar ao painel</a>
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="2" width="12" height="20" rx="2.5" stroke="#06170D" stroke-width="1.8"/>
+          <line x1="9" y1="18.2" x2="15" y2="18.2" stroke="#06170D" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">Pai do Cell<span>Assistência &amp; Acessórios</span></div>
+    </div>
+    <span class="eyebrow">🔒 Acesso restrito · Administração</span>
+    <h1>Caixa das Lojas</h1>
+    <p class="subtitle">Acompanhe o caixa do dia e o histórico de Santa Teresa, Santa Maria e Aracruz.</p>
+  </header>
+
+  <div class="gate" id="gate">
+    <p>Digite a senha de administrador para ver os dados.</p>
+    <input type="password" id="inpSenha" placeholder="Senha">
+    <br>
+    <button id="btnEntrar">Entrar</button>
+    <div class="erro" id="msgErro">Senha incorreta.</div>
+  </div>
+
+  <div id="painelAdmin">
+    <div class="topo-acoes">
+      <button class="btn-atualizar" id="btnAtualizar" type="button">🔄 Atualizar dados</button>
+    </div>
+    <div id="lojasContainer"></div>
+  </div>
+
+  <footer>Pai do Cell — administração interna</footer>
+</div>
+
+<script>
+  const SENHA_ADMIN = "paidocell2026";
+  // Mesmo Bin ID configurado no controle-de-caixa.html (leitura não precisa de chave).
+  const BIN_ID_CAIXA = "6a60bed1f5f4af5e29b0dc00";
+
+  const LOJAS = ["santa-teresa", "santa-maria", "aracruz"];
+  const NOMES_LOJA = { "santa-teresa": "Santa Teresa", "santa-maria": "Santa Maria", "aracruz": "Aracruz" };
+
+  document.getElementById('btnEntrar').addEventListener('click', tentarEntrar);
+  document.getElementById('inpSenha').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tentarEntrar();
+  });
+  function tentarEntrar(){
+    const senha = document.getElementById('inpSenha').value;
+    if (senha === SENHA_ADMIN){
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('painelAdmin').style.display = 'block';
+      carregarDados();
+    } else {
+      document.getElementById('msgErro').style.display = 'block';
+    }
+  }
+
+  function brl(n){
+    return (n || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+  function dataFormatada(iso){
+    const [ano, mes, dia] = iso.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
+  function totaisDe(caixa){
+    let entradas = 0, saidas = 0;
+    (caixa.lancamentos || []).forEach(l => {
+      if (l.tipo === 'entrada') entradas += l.valor; else saidas += l.valor;
+    });
+    const saldo = (caixa.abertura || 0) + entradas - saidas;
+    return { entradas, saidas, saldo };
+  }
+
+  async function carregarDados(){
+    const container = document.getElementById('lojasContainer');
+    if (!BIN_ID_CAIXA){
+      container.innerHTML = '<div class="vazio">Bin ID do caixa ainda não configurado nesta página.</div>';
+      return;
+    }
+    container.innerHTML = '<div class="vazio">Carregando...</div>';
+    try{
+      const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID_CAIXA}/latest`);
+      const json = await resp.json();
+      renderLojas(json.record || {});
+    } catch(e){
+      container.innerHTML = '<div class="vazio">Não consegui carregar os dados. Tente atualizar novamente.</div>';
+    }
+  }
+  document.getElementById('btnAtualizar').addEventListener('click', carregarDados);
+
+  function renderLojas(dados){
+    const container = document.getElementById('lojasContainer');
+    container.innerHTML = '';
+
+    LOJAS.forEach(loja => {
+      const dadosLoja = dados[loja] || { atual: { data: '', abertura: 0, lancamentos: [] }, historico: [] };
+      const atual = dadosLoja.atual || { data: '', abertura: 0, lancamentos: [] };
+      const { entradas, saidas, saldo } = totaisDe(atual);
+      const historico = dadosLoja.historico || [];
+
+      const secao = document.createElement('section');
+      secao.className = 'loja-secao';
+
+      let historicoHtml = '';
+      if (historico.length === 0){
+        historicoHtml = '<div class="vazio">Nenhum dia fechado ainda.</div>';
+      } else {
+        historicoHtml = historico.map((h, i) => `
+          <div class="hist-item" data-toggle="${loja}-${i}">
+            <div class="hist-topo">
+              <span>${dataFormatada(h.data)}</span>
+              <span class="hist-saldo">${brl(h.saldo)}</span>
+            </div>
+            <div class="hist-detalhe" id="det-${loja}-${i}">
+              <div><span>Abertura</span><span>${brl(h.abertura)}</span></div>
+              <div><span>Entradas</span><span>${brl(h.entradas)}</span></div>
+              <div><span>Saídas</span><span>${brl(h.saidas)}</span></div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      secao.innerHTML = `
+        <div class="loja-titulo"><span class="loja-dot"></span>${NOMES_LOJA[loja]}</div>
+        <div class="resumo-hoje">
+          <div class="resumo-row"><span>Dia atual</span><span>${atual.data ? dataFormatada(atual.data) : '—'}</span></div>
+          <div class="resumo-row"><span>Abertura</span><span>${brl(atual.abertura)}</span></div>
+          <div class="resumo-row"><span>Entradas</span><span>${brl(entradas)}</span></div>
+          <div class="resumo-row"><span>Saídas</span><span>${brl(saidas)}</span></div>
+          <div class="resumo-row total"><span>Saldo em caixa agora</span><span>${brl(saldo)}</span></div>
+        </div>
+        <div class="panel-hint" style="font-size:12px; color:var(--ink-soft); margin-bottom:8px;">Histórico de dias fechados</div>
+        ${historicoHtml}
+      `;
+      container.appendChild(secao);
+    });
+
+    container.querySelectorAll('[data-toggle]').forEach(item => {
+      item.addEventListener('click', () => {
+        document.getElementById('det-' + item.dataset.toggle).classList.toggle('aberto');
+      });
+    });
+  }
+</script>
+</body>
+</html>
