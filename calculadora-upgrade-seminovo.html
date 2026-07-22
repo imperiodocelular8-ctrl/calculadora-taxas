@@ -436,37 +436,37 @@
   // tabela real. "precoBase" = valor do aparelho 100% conservado (nota A).
   // =====================================================================
   const modelosUsados = [
-    { nome: "iPhone 11 64GB",        precoBase: 1600 },
-    { nome: "iPhone 11 128GB",       precoBase: 1800 },
-    { nome: "iPhone 11 Pro 256GB",   precoBase: 2200 },
-    { nome: "iPhone 12 64GB",        precoBase: 2100 },
-    { nome: "iPhone 12 128GB",       precoBase: 2400 },
-    { nome: "iPhone 12 Pro 256GB",   precoBase: 3000 },
-    { nome: "iPhone 13 128GB",       precoBase: 2900 },
-    { nome: "iPhone 13 256GB",       precoBase: 3200 },
-    { nome: "iPhone 13 Pro 256GB",   precoBase: 3600 },
-    { nome: "iPhone 14 128GB",       precoBase: 3400 },
-    { nome: "iPhone 14 256GB",       precoBase: 3800 },
-    { nome: "iPhone 14 Pro 256GB",   precoBase: 4400 },
-    { nome: "iPhone 15 128GB",       precoBase: 4200 },
-    { nome: "iPhone 15 256GB",       precoBase: 4700 },
-    { nome: "iPhone 15 Pro 256GB",   precoBase: 5400 },
-    { nome: "iPhone 16 128GB",       precoBase: 5200 },
-    { nome: "iPhone 16 Pro 256GB",   precoBase: 6800 },
+    { nome: "iPhone 11 64GB",        precoBase: 600 },
+    { nome: "iPhone 11 128GB",       precoBase: 600 },
+    { nome: "iPhone 11 Pro 256GB",   precoBase:900 },
+    { nome: "iPhone 12 64GB",        precoBase: 900 },
+    { nome: "iPhone 12 128GB",       precoBase: 950 },
+    { nome: "iPhone 12 Pro 256GB",   precoBase: 1300 },
+    { nome: "iPhone 13 128GB",       precoBase: 1600 },
+    { nome: "iPhone 13 256GB",       precoBase: 1800 },
+    { nome: "iPhone 13 Pro 256GB",   precoBase: 2200 },
+    { nome: "iPhone 14 128GB",       precoBase: 1800 },
+    { nome: "iPhone 14 256GB",       precoBase: 2000 },
+    { nome: "iPhone 14 Pro 256GB",   precoBase: 2700 },
+    { nome: "iPhone 15 128GB",       precoBase: 2400 },
+    { nome: "iPhone 15 256GB",       precoBase: 2600 },
+    { nome: "iPhone 15 Pro 256GB",   precoBase: 3400 },
+    { nome: "iPhone 16 128GB",       precoBase: 3300 },
+    { nome: "iPhone 16 Pro 256GB",   precoBase: 4300 },
   ];
 
   // Preço de venda dos aparelhos que a loja oferece no upgrade.
   const modelosNovos = [
-    { nome: "iPhone 12 128GB",       preco: 2800 },
-    { nome: "iPhone 13 128GB",       preco: 3400 },
-    { nome: "iPhone 13 Pro 256GB",   preco: 4200 },
-    { nome: "iPhone 14 128GB",       preco: 3900 },
-    { nome: "iPhone 14 Pro 256GB",   preco: 5000 },
-    { nome: "iPhone 15 128GB",       preco: 4800 },
-    { nome: "iPhone 15 Pro 256GB",   preco: 6200 },
-    { nome: "iPhone 16 128GB",       preco: 5900 },
-    { nome: "iPhone 16 Pro 256GB",   preco: 7600 },
-    { nome: "iPhone 16 Pro Max 256GB", preco: 8400 },
+    { nome: "iPhone 12 128GB",       preco: 1450 },
+    { nome: "iPhone 13 128GB",       preco: 1950 },
+    { nome: "iPhone 13 Pro 256GB",   preco: 2900 },
+    { nome: "iPhone 14 128GB",       preco: 2300 },
+    { nome: "iPhone 14 Pro 256GB",   preco: 3200 },
+    { nome: "iPhone 15 128GB",       preco: 3000 },
+    { nome: "iPhone 15 Pro 256GB",   preco: 3900 },
+    { nome: "iPhone 16 128GB",       preco: 3900 },
+    { nome: "iPhone 16 Pro 256GB",   preco: 4700 },
+    { nome: "iPhone 16 Pro Max 256GB", preco: 5800 },
   ];
 
   // Opções de checklist e o desconto (fração do valor base) que cada uma aplica.
@@ -490,8 +490,8 @@
   ];
   const opcoesFuncionamento = [
     { label: "Tudo funcionando perfeitamente", desconto: 0 },
-    { label: "Defeito leve (câmera, Face ID, botão, alto-falante)", desconto: 0.15 },
-    { label: "Não liga ou defeito grave", desconto: 0.40 },
+    { label: "Defeito leve (câmera, Face ID, botão, alto-falante)", desconto: 0.3 },
+    { label: "Não liga ou defeito grave", desconto: 0.7 },
   ];
 
   const BONUS_ACESSORIOS = 0.03;   // +3% se tiver caixa e acessórios
