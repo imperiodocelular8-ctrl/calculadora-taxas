@@ -353,6 +353,11 @@
       <select id="selModeloUsado"></select>
     </div>
 
+    <div class="field">
+      <label for="inpPrecoBaseUsado">Valor base (definido pela administração)</label>
+      <input type="number" id="inpPrecoBaseUsado" step="0.01" min="0" readonly style="opacity:0.75; cursor:not-allowed;">
+    </div>
+
     <div class="checklist-grid">
       <div class="field">
         <label for="selTela">Tela</label>
@@ -380,10 +385,18 @@
 
   <section class="panel">
     <h2><span class="num">2</span> Aparelho desejado (novo/semi-novo)</h2>
-    <p class="panel-hint">O que o cliente quer levar na troca.</p>
+    <p class="panel-hint">O que o cliente quer levar na troca. Escolha da lista ou digite manualmente.</p>
     <div class="field">
       <label for="selModeloNovo">Modelo desejado</label>
       <select id="selModeloNovo"></select>
+    </div>
+    <div class="field" id="fieldNomeManual" style="display:none;">
+      <label for="inpNomeNovoManual">Nome do aparelho</label>
+      <input type="text" id="inpNomeNovoManual" placeholder="Ex: iPhone 16 Plus 256GB">
+    </div>
+    <div class="field">
+      <label for="inpPrecoNovo">Preço do aparelho desejado (editável, R$)</label>
+      <input type="number" id="inpPrecoNovo" step="0.01" min="0">
     </div>
   </section>
 
@@ -435,38 +448,14 @@
   // TABELA DE PREÇOS BASE — valores de EXEMPLO. Edite aqui conforme sua
   // tabela real. "precoBase" = valor do aparelho 100% conservado (nota A).
   // =====================================================================
-  const modelosUsados = [
+  // As tabelas de preço agora vêm do arquivo precos.json (editado só pelo admin).
+  // Estes valores abaixo são só um fallback, caso o precos.json não carregue.
+  let modelosUsados = [
     { nome: "iPhone 11 64GB",        precoBase: 600 },
     { nome: "iPhone 11 128GB",       precoBase: 600 },
-    { nome: "iPhone 11 Pro 256GB",   precoBase:900 },
-    { nome: "iPhone 12 64GB",        precoBase: 900 },
-    { nome: "iPhone 12 128GB",       precoBase: 950 },
-    { nome: "iPhone 12 Pro 256GB",   precoBase: 1300 },
-    { nome: "iPhone 13 128GB",       precoBase: 1600 },
-    { nome: "iPhone 13 256GB",       precoBase: 1800 },
-    { nome: "iPhone 13 Pro 256GB",   precoBase: 2200 },
-    { nome: "iPhone 14 128GB",       precoBase: 1800 },
-    { nome: "iPhone 14 256GB",       precoBase: 2000 },
-    { nome: "iPhone 14 Pro 256GB",   precoBase: 2700 },
-    { nome: "iPhone 15 128GB",       precoBase: 2400 },
-    { nome: "iPhone 15 256GB",       precoBase: 2600 },
-    { nome: "iPhone 15 Pro 256GB",   precoBase: 3400 },
-    { nome: "iPhone 16 128GB",       precoBase: 3300 },
-    { nome: "iPhone 16 Pro 256GB",   precoBase: 4300 },
   ];
-
-  // Preço de venda dos aparelhos que a loja oferece no upgrade.
-  const modelosNovos = [
+  let modelosNovos = [
     { nome: "iPhone 12 128GB",       preco: 1450 },
-    { nome: "iPhone 13 128GB",       preco: 1950 },
-    { nome: "iPhone 13 Pro 256GB",   preco: 2900 },
-    { nome: "iPhone 14 128GB",       preco: 2300 },
-    { nome: "iPhone 14 Pro 256GB",   preco: 3200 },
-    { nome: "iPhone 15 128GB",       preco: 3000 },
-    { nome: "iPhone 15 Pro 256GB",   preco: 3900 },
-    { nome: "iPhone 16 128GB",       preco: 3900 },
-    { nome: "iPhone 16 Pro 256GB",   preco: 4700 },
-    { nome: "iPhone 16 Pro Max 256GB", preco: 5800 },
   ];
 
   // Opções de checklist e o desconto (fração do valor base) que cada uma aplica.
@@ -514,17 +503,77 @@
   const selCarcaca = document.getElementById('selCarcaca');
   const selFuncionamento = document.getElementById('selFuncionamento');
   const chkAcessorios = document.getElementById('chkAcessorios');
+  const inpPrecoBaseUsado = document.getElementById('inpPrecoBaseUsado');
+  const inpPrecoNovo = document.getElementById('inpPrecoNovo');
+  const inpNomeNovoManual = document.getElementById('inpNomeNovoManual');
+  const fieldNomeManual = document.getElementById('fieldNomeManual');
 
-  preencherSelect(selModeloUsado, modelosUsados, 'nome');
-  preencherSelect(selModeloNovo, modelosNovos, 'nome');
   preencherSelect(selTela, opcoesTela, 'label');
   preencherSelect(selBateria, opcoesBateria, 'label');
   preencherSelect(selCarcaca, opcoesCarcaca, 'label');
   preencherSelect(selFuncionamento, opcoesFuncionamento, 'label');
 
+  function montarListaModelos(){
+    preencherSelect(selModeloUsado, modelosUsados, 'nome');
+    preencherSelect(selModeloNovo, modelosNovos, 'nome');
+
+    // opção extra para digitar um aparelho que não está na lista
+    const optOutro = document.createElement('option');
+    optOutro.value = 'outro';
+    optOutro.textContent = 'Outro (digitar manualmente)';
+    selModeloNovo.appendChild(optOutro);
+
+    inpPrecoBaseUsado.value = modelosUsados[0].precoBase;
+    inpPrecoNovo.value = modelosNovos[0].preco;
+    calcular();
+  }
+
+  // ao trocar o modelo usado, atualiza o campo de preço base (somente leitura)
+  selModeloUsado.addEventListener('change', () => {
+    inpPrecoBaseUsado.value = modelosUsados[selModeloUsado.value].precoBase;
+    calcular();
+  });
+
+  // ao trocar o modelo desejado, preenche o preço editável (ou libera o nome manual)
+  selModeloNovo.addEventListener('change', () => {
+    if (selModeloNovo.value === 'outro'){
+      fieldNomeManual.style.display = 'block';
+      inpNomeNovoManual.value = '';
+      inpPrecoNovo.value = '';
+    } else {
+      fieldNomeManual.style.display = 'none';
+      inpPrecoNovo.value = modelosNovos[selModeloNovo.value].preco;
+    }
+    calcular();
+  });
+
+  // busca a tabela de preços atualizada (editada só pelo admin no painel)
+  fetch('precos.json')
+    .then(r => r.json())
+    .then(dados => {
+      if (Array.isArray(dados.modelosUsados) && dados.modelosUsados.length){
+        modelosUsados = dados.modelosUsados;
+      }
+      if (Array.isArray(dados.modelosNovos) && dados.modelosNovos.length){
+        modelosNovos = dados.modelosNovos;
+      }
+      montarListaModelos();
+    })
+    .catch(() => {
+      // se não conseguir carregar o precos.json, segue com os valores de fallback
+      montarListaModelos();
+    });
+
   function calcular(){
     const usado = modelosUsados[selModeloUsado.value];
-    const novo = modelosNovos[selModeloNovo.value];
+    const precoBaseUsado = parseFloat(inpPrecoBaseUsado.value) || 0;
+
+    const ehOutro = selModeloNovo.value === 'outro';
+    const nomeNovo = ehOutro
+      ? (inpNomeNovoManual.value.trim() || 'Aparelho digitado manualmente')
+      : modelosNovos[selModeloNovo.value].nome;
+    const precoNovo = parseFloat(inpPrecoNovo.value) || 0;
+
     const tela = opcoesTela[selTela.value];
     const bateria = opcoesBateria[selBateria.value];
     const carcaca = opcoesCarcaca[selCarcaca.value];
@@ -540,20 +589,20 @@
     let fracaoDesconto = tela.desconto + bateria.desconto + carcaca.desconto + func.desconto;
     fracaoDesconto = Math.min(fracaoDesconto, DESCONTO_MAXIMO);
 
-    let valorTroca = usado.precoBase * (1 - fracaoDesconto);
+    let valorTroca = precoBaseUsado * (1 - fracaoDesconto);
     let bonus = 0;
     if (chkAcessorios.checked){
-      bonus = usado.precoBase * BONUS_ACESSORIOS;
+      bonus = precoBaseUsado * BONUS_ACESSORIOS;
       valorTroca += bonus;
     }
-    valorTroca = Math.min(valorTroca, usado.precoBase); // nunca passa do valor base
+    valorTroca = Math.min(valorTroca, precoBaseUsado); // nunca passa do valor base
     valorTroca = Math.max(valorTroca, 0);
 
-    const diferenca = novo.preco - valorTroca;
+    const diferenca = precoNovo - valorTroca;
 
     // ---------- atualiza o laudo na tela ----------
     document.getElementById('laudoModelo').textContent = usado.nome;
-    document.getElementById('lvBase').textContent = brl(usado.precoBase);
+    document.getElementById('lvBase').textContent = brl(precoBaseUsado);
 
     const laudoDescontos = document.getElementById('laudoDescontos');
     laudoDescontos.innerHTML = descontos.map(d => `
@@ -572,8 +621,8 @@
     }
 
     document.getElementById('lvTroca').textContent = brl(valorTroca);
-    document.getElementById('lvModeloNovo').textContent = novo.nome;
-    document.getElementById('lvPrecoNovo').textContent = brl(novo.preco);
+    document.getElementById('lvModeloNovo').textContent = nomeNovo;
+    document.getElementById('lvPrecoNovo').textContent = brl(precoNovo);
 
     const resultadoFinal = document.getElementById('resultadoFinal');
     const rfLabel = document.getElementById('rfLabel');
@@ -598,8 +647,8 @@
     if (chkAcessorios.checked) linhas.push(`• Com caixa e acessórios originais (+${(BONUS_ACESSORIOS*100).toFixed(0)}%)`);
     linhas.push(`*Valor de troca: ${brl(valorTroca)}*`);
     linhas.push(``);
-    linhas.push(`Aparelho desejado: ${novo.nome}`);
-    linhas.push(`Preço: ${brl(novo.preco)}`);
+    linhas.push(`Aparelho desejado: ${nomeNovo}`);
+    linhas.push(`Preço: ${brl(precoNovo)}`);
     linhas.push(``);
     if (diferenca >= 0){
       linhas.push(`*Cliente paga a mais: ${brl(diferenca)}*`);
@@ -610,16 +659,17 @@
     document.getElementById('btnWhatsapp').dataset.link = `https://wa.me/?text=${mensagem}`;
   }
 
-  [selModeloUsado, selModeloNovo, selTela, selBateria, selCarcaca, selFuncionamento].forEach(el => {
+  [selTela, selBateria, selCarcaca, selFuncionamento].forEach(el => {
     el.addEventListener('change', calcular);
   });
   chkAcessorios.addEventListener('change', calcular);
+  inpPrecoBaseUsado.addEventListener('input', calcular);
+  inpPrecoNovo.addEventListener('input', calcular);
+  inpNomeNovoManual.addEventListener('input', calcular);
 
   document.getElementById('btnWhatsapp').addEventListener('click', function(){
     window.open(this.dataset.link, '_blank');
   });
-
-  calcular();
 </script>
 </body>
 </html>

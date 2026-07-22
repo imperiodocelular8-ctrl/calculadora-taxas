@@ -1,0 +1,33 @@
+{
+  "modelosUsados": [
+    { "nome": "iPhone 11 64GB",          "precoBase": 600 },
+    { "nome": "iPhone 11 128GB",         "precoBase": 600 },
+    { "nome": "iPhone 11 Pro 256GB",     "precoBase": 900 },
+    { "nome": "iPhone 12 64GB",          "precoBase": 900 },
+    { "nome": "iPhone 12 128GB",         "precoBase": 950 },
+    { "nome": "iPhone 12 Pro 256GB",     "precoBase": 1300 },
+    { "nome": "iPhone 13 128GB",         "precoBase": 1600 },
+    { "nome": "iPhone 13 256GB",         "precoBase": 1800 },
+    { "nome": "iPhone 13 Pro 256GB",     "precoBase": 2200 },
+    { "nome": "iPhone 14 128GB",         "precoBase": 1800 },
+    { "nome": "iPhone 14 256GB",         "precoBase": 2000 },
+    { "nome": "iPhone 14 Pro 256GB",     "precoBase": 2700 },
+    { "nome": "iPhone 15 128GB",         "precoBase": 2400 },
+    { "nome": "iPhone 15 256GB",         "precoBase": 2600 },
+    { "nome": "iPhone 15 Pro 256GB",     "precoBase": 3400 },
+    { "nome": "iPhone 16 128GB",         "precoBase": 3300 },
+    { "nome": "iPhone 16 Pro 256GB",     "precoBase": 4300 }
+  ],
+  "modelosNovos": [
+    { "nome": "iPhone 12 128GB",         "preco": 1450 },
+    { "nome": "iPhone 13 128GB",         "preco": 1950 },
+    { "nome": "iPhone 13 Pro 256GB",     "preco": 2900 },
+    { "nome": "iPhone 14 128GB",         "preco": 2300 },
+    { "nome": "iPhone 14 Pro 256GB",     "preco": 3200 },
+    { "nome": "iPhone 15 128GB",         "preco": 3000 },
+    { "nome": "iPhone 15 Pro 256GB",     "preco": 3900 },
+    { "nome": "iPhone 16 128GB",         "preco": 3900 },
+    { "nome": "iPhone 16 Pro 256GB",     "preco": 4700 },
+    { "nome": "iPhone 16 Pro Max 256GB", "preco": 5800 }
+  ]
+}
