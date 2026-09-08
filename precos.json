@@ -29,5 +29,26 @@
     { "nome": "iPhone 16 128GB",         "preco": 3900 },
     { "nome": "iPhone 16 Pro 256GB",     "preco": 4700 },
     { "nome": "iPhone 16 Pro Max 256GB", "preco": 5800 }
+  ],
+  "taxasCartao": [
+    { "nome": "Débito",              "taxa": 1.99,  "tipo": "debito",  "parcelas": 1 },
+    { "nome": "Crédito à vista (1x)", "taxa": 3.49,  "tipo": "credito", "parcelas": 1 },
+    { "nome": "Crédito 2x",          "taxa": 4.99,  "tipo": "credito", "parcelas": 2 },
+    { "nome": "Crédito 3x",          "taxa": 5.50,  "tipo": "credito", "parcelas": 3 },
+    { "nome": "Crédito 4x",          "taxa": 5.99,  "tipo": "credito", "parcelas": 4 },
+    { "nome": "Crédito 5x",          "taxa": 6.99,  "tipo": "credito", "parcelas": 5 },
+    { "nome": "Crédito 6x",          "taxa": 7.99,  "tipo": "credito", "parcelas": 6 },
+    { "nome": "Crédito 7x",          "taxa": 8.90,  "tipo": "credito", "parcelas": 7 },
+    { "nome": "Crédito 8x",          "taxa": 9.50,  "tipo": "credito", "parcelas": 8 },
+    { "nome": "Crédito 9x",          "taxa": 10.50, "tipo": "credito", "parcelas": 9 },
+    { "nome": "Crédito 10x",         "taxa": 11.20, "tipo": "credito", "parcelas": 10 },
+    { "nome": "Crédito 11x",         "taxa": 11.90, "tipo": "credito", "parcelas": 11 },
+    { "nome": "Crédito 12x",         "taxa": 12.90, "tipo": "credito", "parcelas": 12 },
+    { "nome": "Crédito 13x",         "taxa": 13.40, "tipo": "credito", "parcelas": 13 },
+    { "nome": "Crédito 14x",         "taxa": 15.00, "tipo": "credito", "parcelas": 14 },
+    { "nome": "Crédito 15x",         "taxa": 16.50, "tipo": "credito", "parcelas": 15 },
+    { "nome": "Crédito 16x",         "taxa": 18.50, "tipo": "credito", "parcelas": 16 },
+    { "nome": "Crédito 17x",         "taxa": 19.00, "tipo": "credito", "parcelas": 17 },
+    { "nome": "Crédito 18x",         "taxa": 20.00, "tipo": "credito", "parcelas": 18 }
   ]
 }
