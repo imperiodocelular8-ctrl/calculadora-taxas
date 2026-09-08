@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0B0F0D">
+<title>Sistema de Vendas · Painel do Lojista</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B0F0D;
+    --panel: #141917;
+    --ink: #EAF3ED;
+    --ink-soft: #8FA69A;
+    --line: #24312B;
+    --teal: #19A94B;
+    --teal-deep: #0F6D30;
+    --amber: #2ECC63;
+    --amber-soft: #163823;
+    --red: #E5484D;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 28px -14px rgba(0,0,0,0.7);
+  }
+  *{ box-sizing: border-box; }
+  html, body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    background-image: radial-gradient(circle at 1px 1px, rgba(234,243,237,0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 40px 16px 90px;
+  }
+  .wrap{ max-width: 720px; margin: 0 auto; }
+
+  .voltar-link{
+    display:inline-block; font-size: 12.5px; font-weight: 600;
+    color: var(--ink-soft); text-decoration: none; margin-bottom: 10px;
+  }
+  .voltar-link:hover{ color: var(--teal); }
+  .logo{ display:flex; align-items:center; gap: 10px; margin-bottom: 18px; }
+  .logo-mark{
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(155deg, #1EBD57, #0F6D30);
+    display:flex; align-items:center; justify-content:center; flex-shrink: 0;
+    box-shadow: 0 4px 14px -4px rgba(25,169,75,0.55);
+  }
+  .logo-mark svg{ width: 18px; height: 18px; }
+  .logo-text{
+    font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 17px;
+    letter-spacing: -0.01em; color: var(--ink); line-height: 1.1;
+  }
+  .logo-text span{
+    display:block; font-family:'IBM Plex Mono', monospace; font-weight: 600;
+    font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--teal); margin-top: 2px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #6FE39B; background: #10281A; display:inline-block;
+    padding: 4px 10px; border-radius: 100px; margin-bottom: 10px; font-weight: 600;
+  }
+  h1{
+    font-family:'Space Grotesk', sans-serif; font-weight: 700;
+    font-size: clamp(24px, 4vw, 32px); margin: 0; letter-spacing: -0.01em;
+  }
+  .subtitle{ color: var(--ink-soft); font-size: 14px; margin-top: 6px; }
+  header{ margin-bottom: 22px; }
+
+  .gate{
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    padding: 26px; box-shadow: var(--shadow); text-align:center;
+  }
+  .gate p{ color: var(--ink-soft); font-size: 13.5px; margin: 6px 0 16px; }
+  .gate input{
+    width: 100%; max-width: 300px; padding: 12px 14px; font-size: 14.5px; text-align:center;
+    border: 1.5px solid var(--line); border-radius: 10px; background: #0E1310; color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .gate input:focus{ outline:none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(25,169,75,0.18); }
+  .gate button{
+    padding: 12px 22px; border-radius: 10px; border: none; background: var(--teal);
+    color: #06170D; font-weight: 700; font-size: 14px; cursor: pointer;
+  }
+  .gate button:hover{ filter: brightness(1.08); }
+  .erro{ color: var(--red); font-size: 12.5px; margin-top: 8px; min-height: 16px; }
+
+  .sessao{
+    display:flex; justify-content:space-between; align-items:center; gap: 12px;
+    background: var(--amber-soft); border: 1px solid rgba(46,204,99,0.35);
+    border-radius: 12px; padding: 11px 16px; font-size: 12.5px; color: #B9E8CC;
+    margin-bottom: 18px;
+  }
+  .sessao b{ color: #fff; }
+  .sessao a{ color: var(--ink-soft); font-size: 12px; text-decoration: underline; }
+
+  .card{
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    box-shadow: var(--shadow); padding: 22px; margin-bottom: 16px;
+  }
+  .card h2{
+    font-family:'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600;
+    margin: 0 0 4px;
+  }
+  .card .hint{ font-size: 12px; color: var(--ink-soft); margin: 0 0 16px; }
+
+  .check-row{
+    display:flex; align-items:center; gap: 10px; margin-bottom: 14px;
+    font-size: 13px; color: var(--ink);
+  }
+  .check-row input{ width: 16px; height: 16px; accent-color: var(--teal); }
+
+  .link-box{
+    display:flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .link-box input{
+    flex: 1 1 260px; min-width: 0; padding: 11px 12px;
+    font-family:'IBM Plex Mono', monospace; font-size: 12px;
+    border: 1.5px solid var(--line); border-radius: 10px; background: #0E1310; color: var(--ink-soft);
+  }
+  .btn-row{ display:flex; gap: 8px; flex-wrap: wrap; }
+  .btn{
+    border: none; border-radius: 10px; padding: 11px 16px; cursor: pointer;
+    font-family: 'Inter', sans-serif; font-weight: 700; font-size: 13px;
+    display:inline-flex; align-items:center; gap: 7px;
+  }
+  .btn-primary{ background: var(--teal); color: #06170D; }
+  .btn-ghost{ background: #0E1310; color: var(--ink); border: 1.5px solid var(--line); }
+  .btn-wa{ background: #25D366; color: #062B17; }
+  .btn:hover{ filter: brightness(1.08); }
+  .btn svg{ width: 16px; height: 16px; }
+  .copiado{ color: #4FE38B; font-size: 12px; margin-top: 8px; min-height: 15px; }
+
+  .ferramentas{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .ferramentas a{
+    display:flex; align-items:center; gap: 10px; text-decoration: none;
+    background: #0E1310; border: 1.5px solid var(--line); border-radius: 12px;
+    padding: 14px; color: var(--ink); font-size: 13px; font-weight: 600;
+  }
+  .ferramentas a:hover{ border-color: var(--teal); }
+  .ferramentas .ic{ font-size: 20px; }
+
+  footer{
+    text-align:center; font-size: 12px; color: var(--ink-soft);
+    margin-top: 26px; font-family: 'IBM Plex Mono', monospace;
+  }
+
+  @media (max-width: 560px){
+    .ferramentas{ grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <a href="index.html" class="voltar-link">← Voltar ao painel</a>
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="2" width="12" height="20" rx="2.5" stroke="#06170D" stroke-width="1.8"/>
+          <line x1="9" y1="18.2" x2="15" y2="18.2" stroke="#06170D" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">Sistema de Vendas<span>Ferramentas internas</span></div>
+    </div>
+    <span class="eyebrow">Área do lojista</span>
+    <h1>Painel do Lojista</h1>
+    <p class="subtitle">Gere e compartilhe o link da calculadora de taxas com sua equipe.</p>
+  </header>
+
+  <div class="gate" id="gate">
+    <p>Entre com seu usuário de lojista (o mesmo de <b>Gerar Garantia</b> / <b>Controle de Caixa</b>).</p>
+    <input type="text" id="loginUsuario" placeholder="Usuário" autocomplete="username">
+    <input type="password" id="loginSenha" placeholder="Senha" autocomplete="current-password">
+    <br>
+    <button id="btnLogin" type="button">Entrar</button>
+    <p style="font-size:12.5px; margin-top:14px;">Ainda não tem conta? <a href="garantias.html" style="color:var(--teal); font-weight:600; text-decoration:none;">Criar cadastro na aba de garantia</a></p>
+    <div class="erro" id="msgErroLogin"></div>
+  </div>
+
+  <div id="conteudoPrincipal" style="display:none;">
+
+    <div class="sessao">
+      <span>Conectado como <b id="nomeLojista">—</b><span id="lojaLojista"></span></span>
+      <a href="#" id="linkSair">sair</a>
+    </div>
+
+    <div class="card">
+      <h2>Compartilhar Calculadora de Taxas</h2>
+      <p class="hint">Link público — quem receber abre direto, sem login, só a calculadora.</p>
+
+      <label class="check-row">
+        <input type="checkbox" id="chkIdentificar" checked>
+        Identificar minha loja e meu nome no comprovante do WhatsApp
+      </label>
+
+      <div class="link-box">
+        <input type="text" id="linkCalc" readonly>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btnCopiar" type="button">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>
+          Copiar link
+        </button>
+        <button class="btn btn-ghost" id="btnAbrir" type="button">Abrir calculadora</button>
+        <button class="btn btn-wa" id="btnWhats" type="button">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.6 1.4 5.1L2 22l5-1.4c1.4.8 3.1 1.2 4.9 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+          Enviar no WhatsApp
+        </button>
+      </div>
+      <div class="copiado" id="msgCopiado"></div>
+    </div>
+
+    <div class="card">
+      <h2>Outras ferramentas</h2>
+      <p class="hint">Acesso rápido às telas internas.</p>
+      <div class="ferramentas">
+        <a href="calculadora-taxa-cartao.html"><span class="ic">💳</span> Calculadora de Taxa de Cartão</a>
+        <a href="calculadora-upgrade-seminovo.html"><span class="ic">📱</span> Upgrade Semi-novo</a>
+        <a href="garantias.html"><span class="ic">🧾</span> Gerar Garantia</a>
+        <a href="controle-de-caixa.html"><span class="ic">🗂️</span> Controle de Caixa</a>
+        <a href="historico-garantias.html"><span class="ic">📚</span> Histórico de Garantias</a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>Sistema de Vendas — uso interno</footer>
+</div>
+
+<script>
+  // ---------- login de lojista (mesma base de usuários de garantias.html) ----------
+  const BIN_ID_GARANTIAS = "6a60c41ef5f4af5e29b0f2ce";
+  const CHAVE_SESSAO = 'paidocell_funcionario_logado';
+  const NOMES_LOJA = { "santa-teresa": "Santa Teresa", "santa-maria": "Santa Maria", "aracruz": "Aracruz" };
+  let lojista = null;
+
+  async function hashSenha(senha){
+    const enc = new TextEncoder();
+    const dados = enc.encode('paidocell_' + senha);
+    const buffer = await crypto.subtle.digest('SHA-256', dados);
+    return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  function nomeLoja(slug){ return NOMES_LOJA[slug] || slug || ''; }
+
+  function linkBase(){
+    return location.href.split('?')[0].split('#')[0]
+      .replace(/painel-lojista\.html$/, 'calculadora-taxa-cartao.html');
+  }
+
+  function montarLink(){
+    let url = linkBase();
+    if (document.getElementById('chkIdentificar').checked && lojista){
+      const p = new URLSearchParams();
+      if (lojista.loja) p.set('loja', lojista.loja);
+      if (lojista.nome) p.set('lojista', lojista.nome);
+      url += '?' + p.toString();
+    }
+    document.getElementById('linkCalc').value = url;
+    return url;
+  }
+
+  function mostrarConteudo(){
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('conteudoPrincipal').style.display = 'block';
+    document.getElementById('nomeLojista').textContent = lojista.nome;
+    document.getElementById('lojaLojista').textContent = lojista.loja ? ' · ' + nomeLoja(lojista.loja) : '';
+    montarLink();
+  }
+
+  document.getElementById('chkIdentificar').addEventListener('change', montarLink);
+
+  document.getElementById('btnCopiar').addEventListener('click', async () => {
+    const url = montarLink();
+    const msg = document.getElementById('msgCopiado');
+    try{
+      await navigator.clipboard.writeText(url);
+      msg.textContent = '✓ Link copiado.';
+    }catch(e){
+      document.getElementById('linkCalc').select();
+      document.execCommand('copy');
+      msg.textContent = '✓ Link copiado.';
+    }
+    setTimeout(() => { msg.textContent = ''; }, 2500);
+  });
+
+  document.getElementById('btnAbrir').addEventListener('click', () => {
+    window.open(montarLink(), '_blank');
+  });
+
+  document.getElementById('btnWhats').addEventListener('click', () => {
+    const url = montarLink();
+    const texto = encodeURIComponent('Calculadora de taxas de cartão:\n' + url);
+    window.open('https://wa.me/?text=' + texto, '_blank');
+  });
+
+  document.getElementById('loginSenha').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('btnLogin').click();
+  });
+
+  document.getElementById('btnLogin').addEventListener('click', async () => {
+    const usuario = document.getElementById('loginUsuario').value.trim().toLowerCase();
+    const senha = document.getElementById('loginSenha').value;
+    const erro = document.getElementById('msgErroLogin');
+    erro.textContent = '';
+    if (!usuario || !senha){ erro.textContent = 'Preencha usuário e senha.'; return; }
+    try{
+      const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID_GARANTIAS}/latest`);
+      const json = await resp.json();
+      const funcionarios = (json.record && json.record.funcionarios) || [];
+      const senhaHash = await hashSenha(senha);
+      const encontrado = funcionarios.find(f => f.usuario === usuario && f.senhaHash === senhaHash);
+      if (!encontrado){ erro.textContent = 'Usuário ou senha incorretos.'; return; }
+      lojista = { nome: encontrado.nome, usuario: encontrado.usuario, loja: encontrado.loja };
+      localStorage.setItem(CHAVE_SESSAO, JSON.stringify(lojista));
+      mostrarConteudo();
+    } catch(e){
+      erro.textContent = 'Não consegui verificar seu login. Confira sua internet.';
+    }
+  });
+
+  document.getElementById('linkSair').addEventListener('click', (e) => {
+    e.preventDefault();
+    localStorage.removeItem(CHAVE_SESSAO);
+    location.reload();
+  });
+
+  // restaura sessão feita em outra ferramenta neste aparelho
+  const sessaoSalva = localStorage.getItem(CHAVE_SESSAO);
+  if (sessaoSalva){
+    try { lojista = JSON.parse(sessaoSalva); mostrarConteudo(); } catch(e){}
+  }
+</script>
+</body>
+</html>

@@ -516,6 +516,7 @@
     <div class="badge-slot">
       ATUALIZADO<br>
       <span id="hoje">21 de jul. de 2026</span>
+      <span id="ident"></span>
     </div>
   </header>
 
@@ -780,6 +781,17 @@
   const hojeEl = document.getElementById('hoje');
   hojeEl.textContent = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' });
 
+  // ---------- identificação opcional vinda do link (?loja=&lojista=) ----------
+  const _params = new URLSearchParams(location.search);
+  const NOMES_LOJA = { "santa-teresa": "Santa Teresa", "santa-maria": "Santa Maria", "aracruz": "Aracruz" };
+  const lojaParam = _params.get('loja') || '';
+  const lojistaParam = (_params.get('lojista') || '').trim();
+  const lojaNome = NOMES_LOJA[lojaParam] || lojaParam || '';
+  const identEl = document.getElementById('ident');
+  if (identEl && (lojaNome || lojistaParam)){
+    identEl.textContent = ' · ' + [lojaNome, lojistaParam].filter(Boolean).join(' · ');
+  }
+
   // Tabela de taxas — fallback local. A versão vigente vem do ERP (mesmo bin
   // do jsonbin que guarda os preços do upgrade). Editável só pela administração.
   let formas = [
@@ -892,6 +904,8 @@
       `Forma de pagamento: ${f.nome}`,
       `Valor do produto: ${brl(valorProduto)}`,
     ];
+    if (lojaNome) linhas.push(`Loja: ${lojaNome}`);
+    if (lojistaParam) linhas.push(`Atendente: ${lojistaParam}`);
     if (f.parcelas > 1){
       linhas.push(`Parcelamento: ${f.parcelas}x de ${brl(valorParcela)}`);
     }
