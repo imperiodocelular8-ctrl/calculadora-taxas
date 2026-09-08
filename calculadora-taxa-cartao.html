@@ -492,10 +492,42 @@
   @media (prefers-reduced-motion: reduce){
     *{ transition: none !important; }
   }
+
+  .gate{
+    max-width: 420px; margin: 60px auto 0;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    padding: 26px; box-shadow: var(--shadow); text-align:center;
+  }
+  .gate p{ color: var(--ink-soft); font-size: 13.5px; margin: 6px 0 16px; }
+  .gate input{
+    width: 100%; max-width: 300px; padding: 12px 14px; font-size: 14.5px; text-align:center;
+    border: 1.5px solid var(--line); border-radius: 10px; background: #0E1310; color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .gate input:focus{ outline:none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(25,169,75,0.18); }
+  .gate button{
+    padding: 12px 22px; border-radius: 10px; border: none; background: var(--teal);
+    color: #06170D; font-weight: 700; font-size: 14px; cursor: pointer;
+  }
+  .gate button:hover{ filter: brightness(1.08); }
+  .sessao-linha{ font-size: 12px; margin: 8px 0 0; color: var(--ink-soft); }
+  .sessao-linha a{ color: var(--ink-soft); text-decoration: underline; }
 </style>
 </head>
 <body>
 <div class="wrap">
+
+  <div class="gate" id="gate">
+    <p>Entre com seu usuário de lojista (o mesmo de <b>Gerar Garantia</b> / <b>Controle de Caixa</b>) para usar a calculadora.</p>
+    <input type="text" id="loginUsuario" placeholder="Usuário" autocomplete="username">
+    <input type="password" id="loginSenha" placeholder="Senha" autocomplete="current-password">
+    <br>
+    <button id="btnLogin" type="button">Entrar</button>
+    <p style="font-size:12.5px; margin-top:14px;">Ainda não tem conta? <a href="garantias.html" style="color:var(--teal); font-weight:600; text-decoration:none;">Crie na aba de gerar garantia</a></p>
+    <div id="msgErroLogin" style="color:#E5484D; font-size:12.5px; margin-top:6px;"></div>
+  </div>
+
+  <div id="conteudoPrincipal" style="display:none;">
 
   <header>
     <div>
@@ -512,6 +544,7 @@
       <span class="eyebrow">Uso interno · Equipe de caixa</span>
       <h1>Calculadora de Taxa de Cartão</h1>
       <p class="subtitle">Confira quanto cobrar do cliente em cada forma de pagamento, sem perder na taxa da maquininha.</p>
+      <p class="sessao-linha">Conectado como <b id="nomeLojista">—</b> · <a href="#" id="linkSair">sair</a></p>
     </div>
     <div class="badge-slot">
       ATUALIZADO<br>
@@ -774,9 +807,65 @@
   </div>
 
   <footer>Sistema de Vendas — uso interno · taxas definidas pela administração e não editáveis nesta tela.</footer>
+
+  </div>
 </div>
 
 <script>
+  // ---------- login de lojista (mesma base de usuários de garantias.html) ----------
+  const BIN_ID_GARANTIAS = "6a60c41ef5f4af5e29b0f2ce";
+  const CHAVE_SESSAO = 'paidocell_funcionario_logado';
+  let funcionarioLogado = null;
+
+  async function hashSenha(senha){
+    const enc = new TextEncoder();
+    const dados = enc.encode('paidocell_' + senha);
+    const buffer = await crypto.subtle.digest('SHA-256', dados);
+    return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  function mostrarConteudo(){
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('conteudoPrincipal').style.display = 'block';
+    const nome = document.getElementById('nomeLojista');
+    if (nome && funcionarioLogado) nome.textContent = funcionarioLogado.nome;
+  }
+
+  document.getElementById('btnLogin').addEventListener('click', async () => {
+    const usuario = document.getElementById('loginUsuario').value.trim().toLowerCase();
+    const senha = document.getElementById('loginSenha').value;
+    const erro = document.getElementById('msgErroLogin');
+    erro.textContent = '';
+    if (!usuario || !senha){ erro.textContent = 'Preencha usuário e senha.'; return; }
+    try{
+      const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID_GARANTIAS}/latest`);
+      const json = await resp.json();
+      const funcionarios = (json.record && json.record.funcionarios) || [];
+      const senhaHash = await hashSenha(senha);
+      const encontrado = funcionarios.find(f => f.usuario === usuario && f.senhaHash === senhaHash);
+      if (!encontrado){ erro.textContent = 'Usuário ou senha incorretos.'; return; }
+      funcionarioLogado = { nome: encontrado.nome, usuario: encontrado.usuario, loja: encontrado.loja };
+      localStorage.setItem(CHAVE_SESSAO, JSON.stringify(funcionarioLogado));
+      mostrarConteudo();
+    } catch(e){
+      erro.textContent = 'Não consegui verificar seu login. Confira sua internet.';
+    }
+  });
+  document.getElementById('loginSenha').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('btnLogin').click();
+  });
+  document.getElementById('linkSair').addEventListener('click', (e) => {
+    e.preventDefault();
+    localStorage.removeItem(CHAVE_SESSAO);
+    location.reload();
+  });
+
+  // restaura sessão já feita em outra ferramenta neste aparelho
+  const sessaoSalva = localStorage.getItem(CHAVE_SESSAO);
+  if (sessaoSalva){
+    try { funcionarioLogado = JSON.parse(sessaoSalva); mostrarConteudo(); } catch(e){}
+  }
+
   const hojeEl = document.getElementById('hoje');
   hojeEl.textContent = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' });
 
